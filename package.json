@@ -1,0 +1,29 @@
+{
+  "name": "ant-design-blazor-code-editor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "exampleJsInterop.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate:themes": "node scripts/generate-themes.js",
+    "generate:js": "node scripts/generate-js.js",
+    "generate": "npm run generate:themes && npm run generate:js",
+    "build-dev:css": "npm run generate:themes && vite build --config vite.config.build.css.ts --mode development",
+    "build-dev:js": "npm run generate:js && vite build --config vite.config.build.js.ts --mode development",
+    "build:css": "npm run generate:themes && vite build --config vite.config.build.css.ts --mode production",
+    "build:js": "npm run generate:js && vite build --config vite.config.build.js.ts --mode production",
+    "build-dev": "npm run build-dev:js && npm run build-dev:css",
+    "build": "npm run generate && vite build --config vite.config.build.ts --mode production -- --theme=defaultt"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "fs-extra": "^11.1.1",
+    "glob": "^10.3.10",
+    "path": "^0.12.7",
+    "postcss-import": "^15.1.0",
+    "sass": "^1.69.4",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0"
+  }
+}

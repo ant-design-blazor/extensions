@@ -1,0 +1,5 @@
+node_modules/**/*
+.vs/**/*
+src/AntDesign.Components/wwwroot/**/*
+src/AntDesign.Components/CodeEditor/obj/**/*
+src/AntDesign.Components/CodeEditor/bin/**/*

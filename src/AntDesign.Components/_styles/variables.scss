@@ -1,0 +1,24 @@
+$ui-prefix: "antd";
+$prefix: "antd";
+
+$themm-bg-color: var(--color-main-background);
+$themm-text-color: var(--color-main-text);
+
+// color
+$theme-colors: (
+    "primary": var(--primary), 
+    "secondary": var(--secondary), 
+    "info": var(--info), 
+    "success": var(--success), 
+    "warning": var(--warning), 
+    "danger": var(--danger), 
+    "light": var(--light), 
+    "dark": var(--dark), 
+);
+
+
+// border
+$border-radius: 0.25rem;
+$border-width: 1px;
+$border-style: solid;
+
