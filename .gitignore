@@ -3,3 +3,5 @@ node_modules/**/*
 src/AntDesign.Components/wwwroot/**/*
 src/AntDesign.Components/CodeEditor/obj/**/*
 src/AntDesign.Components/CodeEditor/bin/**/*
+src/**/dist/*
+src/**/wwwroot/src/*

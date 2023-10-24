@@ -12,23 +12,13 @@ const banner = `/*!
 * Released under the MIT License.
 */`;
 
-const { resolve } = path;
-
-let fileStr = `@import "@/styles/variables.scss";`;
-const projectID = process.env.VITE_APP_PROJECT_ID;
-if (projectID) {
-  fileStr = `@import '@/styles/variables-${projectID}.scss';`;
-}
-
-
-
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
     var isProd = mode === 'production';
 
     return {
         resolve: {
-          alias: [{ find: "@", replacement: resolve(__dirname, "./src") }],
+          alias: [{ find: "@", replacement: path.resolve(__dirname, "./src") }],
         },
         build: {
           minify: isProd,

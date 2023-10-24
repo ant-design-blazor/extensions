@@ -13,7 +13,14 @@
     "build:css": "npm run generate:themes && vite build --config vite.config.build.css.ts --mode production",
     "build:js": "npm run generate:js && vite build --config vite.config.build.js.ts --mode production",
     "build-dev": "npm run build-dev:js && npm run build-dev:css",
-    "build": "npm run generate && vite build --config vite.config.build.ts --mode production -- --theme=defaultt"
+    "build": "npm run generate && vite build --config vite.config.build.ts --mode production -- --theme=defaultt",
+
+    "generate:proj:css": "node scripts/copy-component-css.js",
+    "generate:proj:js": "node scripts/copy-component-js.js",
+    "generate:proj": "npm run generate:proj:css && npm run generate:proj:js",
+    "build-proj:css": "npm run generate:proj:css && node scripts/build-component-css.js --mode development",
+    "build-proj:js": "npm run generate:proj:js && node scripts/build-component-js.js --mode development",
+    "build-proj": "npm run build-proj:css && npm run build-proj:js"
   },
   "author": "",
   "license": "ISC",

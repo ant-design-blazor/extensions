@@ -23,7 +23,7 @@ export default defineConfig({
         preprocessorOptions: {
             scss: {
                 charset: false,
-                additionalData: `@import "@/styles/variables.scss";`,
+                additionalData: `@import "@/variables.scss";`,
             },
             postcss: {
                 plugins: [atImport({ path: path.join(__dirname, 'src`') })],
@@ -46,7 +46,7 @@ export default defineConfig({
             },
         },
         lib: {
-            entry: `./src/${projDirName}/wwwroot/src/scss/styles/themes/default.scss`,
+            entry: `./src/${projDirName}/wwwroot/src/default.scss`,
             formats: ['es'],
             name: 'index',
             fileName: 'index',
