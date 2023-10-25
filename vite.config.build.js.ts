@@ -1,45 +1,37 @@
 import { defineConfig } from "vite";
 
 const path = require("path");
-const config = require("./package.json");
-
-const projDirName = "AntDesign.Components"
-const libName = "ant-design-blazor"
-
-const banner = `/*!
-* ${config.name} v${config.version} ${new Date()}
-* (c) 2023 @${libName}
-* Released under the MIT License.
-*/`;
+const { banner, projRootDirName, projRootDir }  = require("./scripts/common")
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
     var isProd = mode === 'production';
-
+    console.log("process.env", process.env);
     return {
         resolve: {
-          alias: [{ find: "@", replacement: path.resolve(__dirname, "./src") }],
+          alias: [
+            {
+              find: "@",
+              replacement: path.resolve(
+                __dirname,
+                `./${projRootDir}/bundle/src`
+              ),
+            },
+          ],
         },
         build: {
           minify: isProd,
           sourcemap: !isProd,
           emptyOutDir: false,
-          outDir: `./src/${projDirName}/wwwroot/dist`,
+          outDir: `./dist`,
           rollupOptions: {
+            input: `./${projRootDir}/bundle/src/index.ts`,
             output: {
               banner,
-              // 入口文件 input 配置所指向的文件包名 默认值："[name].js"
-              entryFileNames: (fileInfo) => {
-                console.log("entryFileNames", fileInfo.facadeModuleId);
-                return "[name].min.js";
-              },
+              assetFileNames: `[name].[ext]`,
+              entryFileNames: "[name].js",
+              chunkFileNames: "[name]-[hash].js",
             },
-          },
-          lib: {
-            entry: `./src/${projDirName}/wwwroot/src/ts/index.ts`,
-            name: libName,
-            fileName: libName,
-            formats: ["es"],
           },
         },
       }

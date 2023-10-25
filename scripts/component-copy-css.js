@@ -1,8 +1,8 @@
 const { getAllComponentsName }  = require("./common")
-const {copyOneComponentScss} = require('./copy-component-base')
+const {componentCopyScss} = require('./component-copy-base')
 
 
 getAllComponentsName().forEach(function (componentName, index) {
   console.log("copy scss", componentName);
-  copyOneComponentScss(componentName, theme="default")
+  componentCopyScss(componentName, theme="default")
 })

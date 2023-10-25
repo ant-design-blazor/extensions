@@ -2,28 +2,39 @@ const path = require('path')
 const fs = require('fs-extra')
 const glob = require('glob')
 
-const { getAllComponentsName, projRootDir  }  = require("./common")
+const { getAllComponentsName, projRootDir } = require("./common")
 
 
-
-const copyOneComponentTs = (componentName) =>{
-  copyOneComponent(componentName, "_scripts", "ts");
+const bundleCopyTs = (componentName) => {
+  const outputBaseDir = path.join(projRootDir, "bundle/src");
+  copyOneComponent(componentName, "_scripts", outputBaseDir, "ts");
 }
 
-const copyOneComponentScss = (componentName, theme="default") =>{
-  copyOneComponent(componentName, "_styles", "scss");
+const bundleCopyScss = (componentName, theme = "default") => {
+  const outputBaseDir = path.join(projRootDir, "bundle/src");
+  copyOneComponent(componentName, "_styles", outputBaseDir, "scss", theme);
 }
 
-const copyOneComponent = (componentName, commonDir, type, theme="default")=> {
-  const tasks = [];
+const componentCopyTs = (componentName) => {
+  const componentDir = path.join(projRootDir, componentName);
+  const outputBaseDir = `${componentDir}/wwwroot/src`;
+  copyOneComponent(componentName, "_scripts", outputBaseDir, "ts");
+}
 
+const componentCopyScss = (componentName, theme = "default") => {
   const componentDir = path.join(projRootDir, componentName);
   const outputBaseDir = `${componentDir}/wwwroot/src`;
 
+  copyOneComponent(componentName, "_styles", outputBaseDir, "scss", theme);
+}
+
+const copyOneComponent = (componentName, commonDir, outputBaseDir, type, theme = "default") => {
+  const tasks = [];
+
   // index.ts or default.scss file content
-  let tsFileStr = `import AntDesign from "./ts/main";\nimport * as common from "./ts/common";\n\n`
   let tsInterop = "AntDesign.common = common;\n";
-  let scssFileStr = `@import './scss/theme-default.scss';\n@import './scss/variables.scss';\n\n`
+  let tsFileStr = `import AntDesign from "./scripts/main";\nimport * as common from "./scripts/common";\n\n`
+  let scssFileStr = `@import './styles/theme-default.scss';\n@import './styles/variables.scss';\n\n`
 
   // copy common scss and ts
   copyCommonToComponentWwwroot(tasks, outputBaseDir, commonDir, type)
@@ -31,18 +42,18 @@ const copyOneComponent = (componentName, commonDir, type, theme="default")=> {
 
   // copy all component scss and ts
   copyToComponentWwwroot(tasks, outputBaseDir, componentName, type)
-  if(type == "ts"){
+  if (type == "ts") {
     tsFileStr += `import * as ${componentName} from './ts/${componentName}';\n`;
     tsInterop += `AntDesign.interop.${componentName} = ${componentName};\n`;
-  }else if(type == "scss"){
+  } else if (type == "scss") {
     scssFileStr += `@import './scss/${componentName}/index.scss';\n`
   }
 
   // write index.ts or default scss
-  if(type == "ts"){
-    createIndexFile(tasks, outputBaseDir,  tsFileStr += `\n\n` + tsInterop, "index.ts")
-  }else if(type == "scss"){
-    createIndexFile(tasks, outputBaseDir,  scssFileStr, "default.scss")
+  if (type == "ts") {
+    createIndexFile(tasks, outputBaseDir, tsFileStr += `\n\n` + tsInterop, "index.ts")
+  } else if (type == "scss") {
+    createIndexFile(tasks, outputBaseDir, scssFileStr, "default.scss")
   }
 }
 
@@ -53,7 +64,7 @@ function copyToComponentWwwroot(tasks, outputBaseDir, componentName, type) {
   fs.ensureDirSync(componentDirAbs)
 
   // output dir
-  const outputDir = `${outputBaseDir}/${type}/${componentName}` 
+  const outputDir = `${outputBaseDir}/${type}/${componentName}`
   const outputDirAbs = path.resolve(__dirname, `../${outputDir}`);
   fs.ensureDirSync(outputDirAbs)
 
@@ -62,7 +73,7 @@ function copyToComponentWwwroot(tasks, outputBaseDir, componentName, type) {
   componentFiles.map((cs) => {
     // cs: code source, example: ${projRootDir}\{ComponentName}\index.ts
     // __dirname: /repo/scripts
-    if(cs.indexOf("wwwroot") > -1){
+    if (cs.indexOf("wwwroot") > -1) {
       return
     }
     const srcFile = path.resolve(__dirname, `../${cs}`);
@@ -75,9 +86,9 @@ function copyToComponentWwwroot(tasks, outputBaseDir, componentName, type) {
         srcFile,
         targetFile
       )
-      .catch((error) => {
-        console.log(error);
-      })
+        .catch((error) => {
+          console.log(error);
+        })
     )
 
     if (!fileName.endsWith("index.ts") || !fileName.endsWith("index.scss")) {
@@ -88,17 +99,25 @@ function copyToComponentWwwroot(tasks, outputBaseDir, componentName, type) {
 
 
 function copyCommonToComponentWwwroot(tasks, outputDir, dirName, type) {
+  let commonDir = "";
+  if (type.toLowerCase() == "ts") {
+    commonDir = "scripts"
+  } else if (type.toLowerCase() == "scss") {
+    commonDir = "styles"
+  } else {
+    return
+  }
   // 将 _scripts 文件夹下的文件拷贝到 src
   const commonScriptDir = path.resolve(__dirname, `../${projRootDir}/${dirName}`);
   if (fs.existsSync(commonScriptDir)) {
     tasks.push(
       fs.copy(
         commonScriptDir,
-        path.resolve(__dirname, `../${outputDir}/${type}`)
+        path.resolve(__dirname, `../${outputDir}/${commonDir}`)
       )
-      .catch((error) => {
-        console.log(error);
-      })
+        .catch((error) => {
+          console.log(error);
+        })
     )
   }
 }
@@ -118,4 +137,10 @@ function createIndexFile(tasks, outputDir, fileContent, fileNameWithExt) {
 
 
 
-module.exports = { copyOneComponentTs, copyOneComponentScss, copyOneComponent }
+module.exports = {
+  bundleCopyTs,
+  bundleCopyScss,
+  componentCopyTs,
+  componentCopyScss,
+  copyOneComponent
+}

@@ -1,6 +1,6 @@
 // import { build } from 'vite';
 const {build} = require('vite')
-const {getAllComponentsEntryFiles, createTsConfig} = require('./build-component-base')
+const {getAllComponentsEntryFiles, createTsConfig} = require('./component-build-base')
 
 
 const allEntryFiles = getAllComponentsEntryFiles("index.ts")

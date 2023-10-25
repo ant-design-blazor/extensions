@@ -1,21 +1,10 @@
 // build.js
 
-// import { build } from 'vite';
-const {build} = require('vite')
 const path = require('path')
-const fs = require('fs')
 const atImport = require('postcss-import')
-const config = require('../package.json')
 
-const { getAllComponentsName, projRootDir  }  = require("./common")
+const { getAllComponentsName, projRootDir, banner }  = require("./common")
 
-const libName = "ant-design-blazor"
-
-const banner = `/*!
-* ${config.name} v${config.version} ${new Date()}
-* (c) 2023 @${libName}
-* Released under the MIT License.
-*/`;
 
 // gene component info
 const getAllComponentsEntryFiles = (entryFileName)=>{
@@ -37,19 +26,16 @@ const getAllComponentsEntryFiles = (entryFileName)=>{
 const createScssConfig = (libItem) => {
   return {
     configFile: false,
-    resolve: {
-        alias: [{ find: '@', replacement: path.resolve(__dirname, `./${projRootDir}/wwwroot/src/scss`) }],
-    },
     css: {
-        preprocessorOptions: {
-            // scss: {
-            //     charset: false,
-            //     additionalData: `@import "@/variables.scss";`,
-            // },
-            postcss: {
-                plugins: [atImport({ path: path.join(__dirname, 'src`') })],
-            },
+      preprocessorOptions: {
+        scss: {
+          charset: false,
+          additionalData: `@import "./styles/variables.scss";`,
         },
+        postcss: {
+          plugins: [atImport({ path: path.join(__dirname, "src`") })],
+        },
+      },
     },
     plugins: [],
     build: {
@@ -80,9 +66,6 @@ const createScssConfig = (libItem) => {
 const createTsConfig = libItem => {
   return {
     configFile: false,
-      resolve: {
-        alias: [{ find: '@', replacement: path.resolve(__dirname, `./${projRootDir}/wwwroot/src/ts`) }],
-    },
     plugins: [],
     build: {
       emptyOutDir: false, 

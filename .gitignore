@@ -1,7 +1,10 @@
 node_modules/**/*
 .vs/**/*
+**/.vs
 src/AntDesign.Components/wwwroot/**/*
 src/AntDesign.Components/CodeEditor/obj/**/*
 src/AntDesign.Components/CodeEditor/bin/**/*
 src/**/dist/*
 src/**/wwwroot/src/*
+dist/**/*
+src/AntDesign.Components/bundle/**/*
