@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "rootDir": ".",
     "target": "ESNext",
-    "types": ["vite/client", "node"],
+    "types": ["vite/client"],
     "allowJs": false,
     "declaration": true,
     "declarationDir": "./dist/esm/types",
@@ -27,9 +27,9 @@
     "lib": ["esnext", "dom"],
     // "outDir": "./tsc/test",
     "paths": {
-      "@/*": [ "src/AntDesign.Components/*" ]
+      "@/*": [ "src/*" ]
     }
   },
-  "include": [ "src/AntDesign.Components/**/*.ts", "src/AntDesign.Components/**/*.d.ts" ],
+  "include": [ "src/**/*.ts", "src/**/*.d.ts" ],
   "exclude": ["./node_modules/*"]
 }

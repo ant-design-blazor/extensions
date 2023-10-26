@@ -5,17 +5,15 @@
   "main": "exampleJsInterop.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    
     "generate:bundle:css": "node scripts/bundle-copy-css.js",
     "generate:bundle:js": "node scripts/bundle-copy-js.js",
     "generate:bundle": "npm run generate:bundle:css && npm run generate:bundle:js",
     "build:css": "npm run generate:bundle:css && vite build --config vite.config.build.css.ts --mode development",
-    "build:js":  "npm run generate:bundle:js  && vite build --config vite.config.build.js.ts  --mode development",
+    "build:js": "npm run generate:bundle:js  && vite build --config vite.config.build.js.ts  --mode development",
     "build-prod:css": "npm run generate:bundle:css && vite build --config vite.config.build.css.ts --mode production",
-    "build-prod:js":  "npm run generate:bundle:js  && vite build --config vite.config.build.js.ts --mode production",
+    "build-prod:js": "npm run generate:bundle:js  && vite build --config vite.config.build.js.ts --mode production",
     "build": "npm run build:js && npm run build:css",
     "build-prod": "npm run generate:bundle && vite build --config vite.config.build.ts --mode production",
-
     "generate:proj:css": "node scripts/component-copy-css.js",
     "generate:proj:js": "node scripts/component-copy-js.js",
     "generate:proj": "npm run generate:proj:css && npm run generate:proj:js",
@@ -30,8 +28,12 @@
     "glob": "^10.3.10",
     "path": "^0.12.7",
     "postcss-import": "^15.1.0",
+    "rollup-plugin-external-globals": "^0.8.0",
     "sass": "^1.69.4",
     "typescript": "^5.2.2",
     "vite": "^4.5.0"
+  },
+  "dependencies": {
+    "monaco-editor": "^0.44.0"
   }
 }

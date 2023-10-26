@@ -1,0 +1,57 @@
+﻿@page "/"
+
+<div>
+    <header>
+        <div>
+            <select @onchange="@(async (e) => { await _editor!.SetLanguage((string)e.Value!); })">
+                
+                @foreach (var languageName in _languages)
+                {
+                    if (languageName == MonacoEditorLanguages.Javascript)
+                    {
+                        <option selected value="@languageName">@languageName</option>
+                    }
+                    else
+                    {
+                        <option value="@languageName">@languageName</option>
+                    }
+                }
+            </select>
+        </div>
+        <div>
+            <select @onchange="@(async (e) => { 
+                                    await _editor!.SetTheme((string)e.Value!);
+                               })">
+                <option selected value="@MonacoEditorThemes.Vs">@MonacoEditorThemes.Vs</option>
+                <option value="@MonacoEditorThemes.VsDark">@MonacoEditorThemes.VsDark</option>
+                <option value="@MonacoEditorThemes.HighContrastDark">@MonacoEditorThemes.HighContrastDark</option>
+            </select>
+        </div>
+    </header>
+
+    <MonacoEditor 
+        @ref="@_editor"
+        Style="height:500px;"
+        Language="@MonacoEditorLanguages.Typescript"
+        Options="@(new 
+         {
+             minimap= new 
+             {
+                 enabled= true
+             }
+         })"
+
+    />
+
+    <div>
+        <div>
+            <button @onclick="@(async () => await _editor!.SetValue(_val))">
+                set value
+            </button>
+
+            <button @onclick="@(async () => { var v = await _editor!.GetValue(); Console.WriteLine(v); })">
+                get value
+            </button>
+        </div>
+    </div>
+</div>

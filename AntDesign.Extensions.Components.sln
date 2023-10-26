@@ -1,0 +1,86 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-solutions", "1-solutions", "{3FDAF0B4-57D6-4CF2-A179-1037917D5274}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+		package.json = package.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-src", "3-src", "{1EA39B74-99A0-4D31-BAA9-C8E17DEB4967}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4-sample", "4-sample", "{DD781CE4-7A81-4AE0-BF35-94B6364271FD}"
+	ProjectSection(SolutionItems) = preProject
+		samples\Directory.Build.props = samples\Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonacoEditor", "samples\MonacoEditor\MonacoEditor.csproj", "{DBB47906-72FD-4B8E-9B5A-20F10805CDFC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntDesign.Extensions.Components.MonacoEditor", "src\MonacoEditor\AntDesign.Extensions.Components.MonacoEditor.csproj", "{8A49CCF5-3E16-435D-A403-D6FEB68E2EE5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2-scripts", "2-scripts", "{677DC6C7-77C3-4F9F-AC16-7D05AC7D1093}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\bundle-copy-css.js = scripts\bundle-copy-css.js
+		scripts\bundle-copy-js.js = scripts\bundle-copy-js.js
+		scripts\common.js = scripts\common.js
+		scripts\component-build-base.js = scripts\component-build-base.js
+		scripts\component-build-css.js = scripts\component-build-css.js
+		scripts\component-build-js.js = scripts\component-build-js.js
+		scripts\component-copy-base.js = scripts\component-copy-base.js
+		scripts\component-copy-css.js = scripts\component-copy-css.js
+		scripts\component-copy-js.js = scripts\component-copy-js.js
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AntDesign.Extensions.Components.Common", "src\Common\AntDesign.Extensions.Components.Common.csproj", "{B963A00F-7F8C-4263-8BAD-84318E56C7AC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_scripts", "_scripts", "{0AAF65C8-108C-42BC-B1DC-C401A8A5CCC6}"
+	ProjectSection(SolutionItems) = preProject
+		src\_scripts\common.ts = src\_scripts\common.ts
+		src\_scripts\main.ts = src\_scripts\main.ts
+		src\_scripts\util.ts = src\_scripts\util.ts
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_styles", "_styles", "{D21EEB94-B32D-4FBB-9CA1-8CAFFE4ECD4D}"
+	ProjectSection(SolutionItems) = preProject
+		src\_styles\theme-common.scss = src\_styles\theme-common.scss
+		src\_styles\theme-default.scss = src\_styles\theme-default.scss
+		src\_styles\variables.scss = src\_styles\variables.scss
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DBB47906-72FD-4B8E-9B5A-20F10805CDFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBB47906-72FD-4B8E-9B5A-20F10805CDFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBB47906-72FD-4B8E-9B5A-20F10805CDFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBB47906-72FD-4B8E-9B5A-20F10805CDFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A49CCF5-3E16-435D-A403-D6FEB68E2EE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A49CCF5-3E16-435D-A403-D6FEB68E2EE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A49CCF5-3E16-435D-A403-D6FEB68E2EE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A49CCF5-3E16-435D-A403-D6FEB68E2EE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B963A00F-7F8C-4263-8BAD-84318E56C7AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B963A00F-7F8C-4263-8BAD-84318E56C7AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B963A00F-7F8C-4263-8BAD-84318E56C7AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B963A00F-7F8C-4263-8BAD-84318E56C7AC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DBB47906-72FD-4B8E-9B5A-20F10805CDFC} = {DD781CE4-7A81-4AE0-BF35-94B6364271FD}
+		{8A49CCF5-3E16-435D-A403-D6FEB68E2EE5} = {1EA39B74-99A0-4D31-BAA9-C8E17DEB4967}
+		{B963A00F-7F8C-4263-8BAD-84318E56C7AC} = {1EA39B74-99A0-4D31-BAA9-C8E17DEB4967}
+		{0AAF65C8-108C-42BC-B1DC-C401A8A5CCC6} = {1EA39B74-99A0-4D31-BAA9-C8E17DEB4967}
+		{D21EEB94-B32D-4FBB-9CA1-8CAFFE4ECD4D} = {1EA39B74-99A0-4D31-BAA9-C8E17DEB4967}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4BC9F84D-387B-4000-9925-0D4804A38C0C}
+	EndGlobalSection
+EndGlobal

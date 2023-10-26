@@ -2,17 +2,18 @@
 
 const path = require('path')
 const atImport = require('postcss-import')
+const externalGlobals = require("rollup-plugin-external-globals");
 
-const { getAllComponentsName, projRootDir, banner }  = require("./common")
+const { getAllComponentsName, projRootDir, banner } = require("./common")
 
 
 // gene component info
-const getAllComponentsEntryFiles = (entryFileName)=>{
+const getAllComponentsEntryFiles = (entryFileName) => {
   const libraries = [];
 
   getAllComponentsName().forEach(function (componentName, index) {
     const entryFile = `./${projRootDir}/${componentName}/wwwroot/src/${entryFileName}`;
-  
+
     libraries.push({
       entry: entryFile,
       name: componentName,
@@ -39,7 +40,7 @@ const createScssConfig = (libItem) => {
     },
     plugins: [],
     build: {
-      emptyOutDir: false, 
+      emptyOutDir: false,
       outDir: libItem.outDir,
       // sourcemap: true,
       // lib: {
@@ -51,13 +52,13 @@ const createScssConfig = (libItem) => {
         // other options
         input: libItem.entry,
         output: {
-          banner, 
+          banner,
           assetFileNames: `[name].[ext]`,
           entryFileNames: "[name].js",
           chunkFileNames: "[name]-[hash].js",
           // entryFileNames: "[name].[format].js",
           // chunkFileNames: "[name]-[hash].[format].js",
-      },
+        },
       },
     },
   }
@@ -68,24 +69,29 @@ const createTsConfig = libItem => {
     configFile: false,
     plugins: [],
     build: {
-      emptyOutDir: false, 
+      emptyOutDir: false,
       outDir: libItem.outDir,
-      // sourcemap: true,
+      sourcemap: true,
+      minify: false,
       // lib: {
       //   entry: libItem.entry,
       //   name: libItem.name,
       //   fileName: libItem.fileName,
       // },
       rollupOptions: {
-        input: libItem.entry,
+        // input: libItem.entry,
         output: {
-          banner, 
+          banner,
           assetFileNames: `[name].[ext]`,
           entryFileNames: "[name].js",
           chunkFileNames: "[name]-[hash].js",
           // entryFileNames: "[name].[format].js",
           // chunkFileNames: "[name]-[hash].[format].js",
+        },
       },
+      lib: {
+        entry: libItem.entry,
+        formats: ["es"],
       },
     },
   }

@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const glob = require('glob')
 
-const { getAllComponentsName, projRootDir } = require("./common")
+const { globalMount, projRootDir } = require("./common")
 
 
 const bundleCopyTs = (componentName) => {
@@ -32,8 +32,8 @@ const copyOneComponent = (componentName, commonDir, outputBaseDir, type, theme =
   const tasks = [];
 
   // index.ts or default.scss file content
-  let tsInterop = "AntDesign.common = common;\n";
-  let tsFileStr = `import AntDesign from "./scripts/main";\nimport * as common from "./scripts/common";\n\n`
+  let tsInterop = `(window as any).${globalMount}.common = common;\n`;
+  let tsFileStr = `import "./scripts/main"; \nimport * as common from "./scripts/common";\n\n`
   let scssFileStr = `@import './styles/theme-default.scss';\n@import './styles/variables.scss';\n\n`
 
   // copy common scss and ts
@@ -44,7 +44,7 @@ const copyOneComponent = (componentName, commonDir, outputBaseDir, type, theme =
   copyToComponentWwwroot(tasks, outputBaseDir, componentName, type)
   if (type == "ts") {
     tsFileStr += `import * as ${componentName} from './ts/${componentName}';\n`;
-    tsInterop += `AntDesign.interop.${componentName} = ${componentName};\n`;
+    tsInterop += `(window as any).${globalMount}.${componentName} = ${componentName};\n`;
   } else if (type == "scss") {
     scssFileStr += `@import './scss/${componentName}/index.scss';\n`
   }
