@@ -7,7 +7,7 @@
                 
                 @foreach (var languageName in _languages)
                 {
-                    if (languageName == MonacoEditorLanguages.Javascript)
+                    if (languageName == _selectedLanguages)
                     {
                         <option selected value="@languageName">@languageName</option>
                     }
@@ -45,7 +45,11 @@
 
     <div>
         <div>
-            <button @onclick="@(async () => await _editor!.SetValue(_val))">
+            <button @onclick="@(async () => {
+                                    _selectedLanguages = MonacoEditorLanguages.Razor;
+                                    await _editor!.SetLanguage(_selectedLanguages);
+                                    await _editor!.SetValue(_val);
+                              })">
                 set value
             </button>
 

@@ -7,7 +7,8 @@ public partial class Index
     MonacoEditor? _editor;
 
     private readonly string _val = """
-// please change the language to "razor"
+// This is a razor code snippet
+
 @page "/";
 
 <MonacoEditor />
@@ -18,6 +19,8 @@ public partial class Index
 """;
 
     private readonly List<string> _languages = new List<string>();
+    private string _selectedLanguages = MonacoEditorLanguages.Typescript;
+
     public Index()
     {
         var t = typeof(MonacoEditorLanguages);
@@ -36,7 +39,7 @@ public partial class Index
     {
         if (firstRender)
         {
-             await Task.Delay(1000).ContinueWith( (s) => _editor!.SetValue(_defaultVal));
+             await Task.Delay(100).ContinueWith( (s) => _editor!.SetValue(_defaultVal));
         }
     }
 }

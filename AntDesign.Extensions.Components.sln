@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-solutions", "1-solutions"
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 		package.json = package.json
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-src", "3-src", "{1EA39B74-99A0-4D31-BAA9-C8E17DEB4967}"
@@ -35,7 +36,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2-scripts", "2-scripts", "{
 		scripts\component-copy-js.js = scripts\component-copy-js.js
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AntDesign.Extensions.Components.Common", "src\Common\AntDesign.Extensions.Components.Common.csproj", "{B963A00F-7F8C-4263-8BAD-84318E56C7AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntDesign.Extensions.Components.Common", "src\Common\AntDesign.Extensions.Components.Common.csproj", "{B963A00F-7F8C-4263-8BAD-84318E56C7AC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_scripts", "_scripts", "{0AAF65C8-108C-42BC-B1DC-C401A8A5CCC6}"
 	ProjectSection(SolutionItems) = preProject
