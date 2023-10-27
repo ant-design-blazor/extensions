@@ -39,7 +39,11 @@ public partial class Index
     {
         if (firstRender)
         {
-             await Task.Delay(100).ContinueWith( (s) => _editor!.SetValue(_defaultVal));
+            await _editor!.IsReady.ContinueWith(ready =>
+                ready.Result
+                    ? _editor!.SetValue(_defaultVal)
+                    : Task.CompletedTask
+                    );
         }
     }
 }

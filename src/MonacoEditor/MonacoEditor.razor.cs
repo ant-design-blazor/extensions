@@ -9,10 +9,8 @@ public partial class MonacoEditor : IAsyncDisposable
 {
     [Inject]
     internal IJSRuntime JsRuntime { get; set; } = default!;
-    [Inject]
-    internal IConfiguration Configuration { get; set; } = default!;
 
-    [Parameter] 
+    [Parameter]
     public string Height { get; set; } = "500px";
 
     [Parameter]
@@ -20,7 +18,7 @@ public partial class MonacoEditor : IAsyncDisposable
     [Parameter]
     public string Class { get; set; } = "";
 
-    [Parameter] 
+    [Parameter]
     public string Theme { get; set; } = MonacoEditorThemes.Vs;
 
     [Parameter]
@@ -34,19 +32,24 @@ public partial class MonacoEditor : IAsyncDisposable
 
     public IJSObjectReference? JsMirror { get; private set; }
 
+    private TaskCompletionSource<bool> _isReadyTcs = new (false);
+    public Task<bool> IsReady => _isReadyTcs.Task;
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             JsMirror = await JsRuntime.InvokeAsync<IJSInProcessObjectReference>(
-                "window.AntDesign.ext.MonacoEditor.init", _id, 
+                "window.AntDesign.ext.MonacoEditor.init", _id,
                 new
                 {
                     theme = Theme,
                     language = Language,
                     othersOptions = Options
                 });
+
+            _isReadyTcs.SetResult(true);
         }
     }
 

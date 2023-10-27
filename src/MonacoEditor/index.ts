@@ -29,7 +29,6 @@ export class CodeEditor {
     othersOptions.language = options.language;
     othersOptions.theme = options.theme;
     const mergeOption = Object.assign(defaultOptions, othersOptions);
-    console.log("mergeOption", mergeOption);
     if (!id) {
       throw "codeEditor id is null";
     }
@@ -50,18 +49,14 @@ export class CodeEditor {
   }
 
   setLanguage(language: string) {
-    console.log(1, language);
     const model = this._editor.getModel();
     if (model) {
-      console.log(2, model, language);
       getMonaco().editor.setModelLanguage(model, language);
     }
   }
 
   setTheme(themeName: string) {
-    console.log(1, themeName);
     if (themeName) {
-      console.log(2, themeName);
       getMonaco().editor.setTheme(themeName);
     }
   }
