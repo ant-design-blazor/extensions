@@ -4,7 +4,7 @@ namespace AntDesign.Extensions.Samples.Pages;
 
 public partial class Index
 {
-    MonacoEditor? _editor;
+    StandaloneCodeEditor? _editor;
 
     private readonly string _val = """
 // This is a razor code snippet

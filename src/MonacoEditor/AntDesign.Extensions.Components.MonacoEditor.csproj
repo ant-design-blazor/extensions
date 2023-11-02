@@ -5,6 +5,7 @@
         <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
         <PackageId>AntDesign.Extensions.Components.MonacoEditor</PackageId>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     </PropertyGroup>
 
     <ItemGroup>
@@ -22,11 +23,6 @@
         <Content Remove="wwwroot\src\**" />
         <EmbeddedResource Remove="wwwroot\src\**" />
         <None Remove="wwwroot\src\**" />
-    </ItemGroup>
-
-
-    <ItemGroup>
-        <EditorConfigFiles Remove="F:\Git\ant-design-blazor-components\src\MonacoEditor\.editorconfig" />
     </ItemGroup>
 
 

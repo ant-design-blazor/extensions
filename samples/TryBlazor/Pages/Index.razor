@@ -1,0 +1,26 @@
+﻿@page "/"
+
+<TryBlazor @ref="_tryBlazor" ThrowError="false" OnCompile="@OnCompile" />
+
+<hr/>
+
+<div>
+    <pre>@_logs</pre> 
+</div>
+
+@code
+{
+    TryBlazor? _tryBlazor;
+
+    private string _logs = "";
+
+
+    private void OnCompile()
+    {
+        if (_tryBlazor != null)
+        {
+            var logs = _tryBlazor.Logs;
+            _logs = string.Join("\r\n", logs);
+        }
+    }
+}

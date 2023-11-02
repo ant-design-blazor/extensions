@@ -55,12 +55,6 @@ export class CodeEditor {
     }
   }
 
-  setTheme(themeName: string) {
-    if (themeName) {
-      getMonaco().editor.setTheme(themeName);
-    }
-  }
-
   dispose() {
     this._editor.dispose();
   }
