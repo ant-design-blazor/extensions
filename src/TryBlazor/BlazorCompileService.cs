@@ -1,10 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.IO;
+using System.IO.Pipelines;
 using System.Net.Http.Json;
 using System.Reflection;
 using System.Runtime;
+using System.Runtime.Loader;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Components.WebAssembly.Services;
 using Microsoft.AspNetCore.Razor.Language;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -96,31 +99,40 @@ public class BlazorCompileService : ICompileService
         {
             return;
         }
-        var tasks = new List<Task>();
+
         var loadedAssembly = new HashSet<string>();
-        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+        // basic assemblies
+        var basicReferenceAssemblyRoots = new[]
         {
-            if (assembly.IsDynamic)
-            {
-                continue;
-            }
-
-            var name = assembly.GetName().Name;
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                continue;
-            }
-            loadedAssembly.Add(name);
-            tasks.Add(LoadReference(name + ".dll"));
-        }
-
-        var assemblyNames = _blazorCompileServiceOptions.AdditionalAssemblys
-            .SelectMany(assembly => assembly.GetReferencedAssemblies().Concat(new[] { assembly.GetName() }))
+            typeof(HttpClient).Assembly, // System.Net.Http
+            typeof(HttpClientJsonExtensions).Assembly, // System.Net.Http.Json
+            typeof(ComponentBase).Assembly, // Microsoft.AspNetCore.Components
+            typeof(LazyAssemblyLoader).Assembly, // Microsoft.AspNetCore.Components.WebAssembly
+            typeof(IJSRuntime).Assembly, // Microsoft.JSInterop
+            typeof(RequiredAttribute).Assembly, // System.ComponentModel.Annotations
+            typeof(IQueryable).Assembly, // System.Linq.Expressions
+            typeof(AssemblyTargetedPatchBandAttribute).Assembly, // System.Private.CoreLib
+            typeof(Console).Assembly, // System.Console
+            typeof(Uri).Assembly, // System.Private.Uri
+        };
+        var basicNames = basicReferenceAssemblyRoots
+            .SelectMany(assembly => assembly
+                .GetReferencedAssemblies()
+                .Concat(new[] { assembly.GetName() })
+            )
             .Select(x => x.Name)
             .Distinct()
             .ToList();
+        // loaded  additional assemblies
+        var additionalNames = _blazorCompileServiceOptions
+            .AdditionalAssemblies
+            .SelectMany(assembly => assembly.GetReferencedAssemblies().Concat(new[] { assembly.GetName() }))
+            .Select(x => x.Name)
+            .ToHashSet();
 
-        foreach (var name in assemblyNames)
+        var tasks = new List<Task>();
+        basicNames.AddRange(additionalNames);
+        foreach (var name in basicNames.ToHashSet())
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -136,40 +148,10 @@ public class BlazorCompileService : ICompileService
         }
 
         await Task.WhenAll(tasks);
-
-        var basicReferenceAssemblyRoots = new[]
-        {
-            typeof(Console).Assembly, // System.Console
-            typeof(Uri).Assembly, // System.Private.Uri
-            typeof(AssemblyTargetedPatchBandAttribute).Assembly, // System.Private.CoreLib
-            typeof(NavLink).Assembly, // Microsoft.AspNetCore.Components.Web
-            typeof(IQueryable).Assembly, // System.Linq.Expressions
-            typeof(HttpClientJsonExtensions).Assembly, // System.Net.Http.Json
-            typeof(HttpClient).Assembly, // System.Net.Http
-            typeof(IJSRuntime).Assembly, // Microsoft.JSInterop
-            typeof(RequiredAttribute).Assembly, // System.ComponentModel.Annotations
-        };
-        var b = basicReferenceAssemblyRoots.SelectMany(assembly => assembly.GetReferencedAssemblies().Concat(new[] { assembly.GetName() }))
-            .Select(x => x.Name)
-            .Distinct()
-            .ToList();
-        foreach (var name in b)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                continue;
-            }
-
-            if (loadedAssembly.Contains(name))
-            {
-                continue;
-            }
-            loadedAssembly.Add(name);
-            tasks.Add(LoadReference(name + ".dll"));
-        }
     }
 
-    public async Task LoadReference(string name)
+
+    public async Task LoadReference(string name, bool isBlazorComponent = false)
     {
         //_logger.LogInformation("LoadReference:{name}", name);
         if (!name.EndsWith(".dll"))
@@ -182,7 +164,7 @@ public class BlazorCompileService : ICompileService
         if (response.IsSuccessStatusCode)
         {
             var stream = await response.Content.ReadAsStreamAsync();
-            _references.Add(MetadataReference.CreateFromStream(stream));
+            await LoadReference(stream, isBlazorComponent);
             return;
         }
         if (name.EndsWith("resources.dll"))
@@ -192,6 +174,16 @@ public class BlazorCompileService : ICompileService
         }
         _logger.LogError("resources load error: {StatusCode}, {response}", response.StatusCode, response);
         throw new Exception("LoadReference error: not found assembly resources: " + url);
+    }
+
+    public Task LoadReference(Stream stream, bool isBlazorComponent = false)
+    {
+        _references.Add(MetadataReference.CreateFromStream(stream));
+        if (isBlazorComponent)
+        {
+            _projectEngine = CreateRazorProjectEngine(_references);
+        }
+        return Task.CompletedTask;
     }
 
     #endregion
@@ -208,11 +200,33 @@ public class BlazorCompileService : ICompileService
             builder.Features.Add(new DefaultMetadataReferenceFeature { References = references });
         });
 
-    public async Task<CompileResult> Compile(
-        List<CodeInfo> codeInfos,
+    public async Task<CompileResult> CompileAsync(
+        List<CodeFile> codeInfos,
         string assemblyName = nameof(BlazorCompileService),
         OptimizationLevel optimizationLevel = OptimizationLevel.Release
         )
+    {
+        var streamResult = await
+            CompileToStreamAsync(
+                codeInfos,
+                assemblyName,
+                optimizationLevel
+                );
+        var result = new CompileResult(streamResult.CompileLogs);
+        if (streamResult.Stream != null)
+        {
+            var assembly = AppDomain.CurrentDomain.Load(streamResult.Stream.ToArray());
+            result.Assembly = assembly;
+        }
+
+        return result;
+    }
+
+    public async Task<CompileStreamResult> CompileToStreamAsync(
+     List<CodeFile> codeInfos,
+     string assemblyName = nameof(BlazorCompileService),
+     OptimizationLevel optimizationLevel = OptimizationLevel.Release
+     )
     {
         if (codeInfos == null || codeInfos.Count == 0)
         {
@@ -220,26 +234,37 @@ public class BlazorCompileService : ICompileService
         }
 
         var logs = new List<CompileLog>();
-        var result = new CompileResult(logs);
+        var result = new CompileStreamResult(logs);
         await (_initTask ??= SafeInitEngine());
         Debug.Assert(_projectEngine != null);
 
         logs.Add(new CompileLog(Content: "begin compile..."));
 
         var syntaxTrees = new List<SyntaxTree>();
-        foreach (CodeInfo codeInfo in codeInfos)
+        foreach (CodeFile codeInfo in codeInfos)
         {
             var csharpCode = codeInfo.Code;
             if (codeInfo.CodeType == CodeType.Razor)
             {
-                var (code, diagnostics) = CompileRazorToCSharp(codeInfo, logs);
+                var (code, diagnostics)
+                    = CompileRazorToCSharp(codeInfo, logs);
                 if (DiagnosticHasError(diagnostics, logs))
                 {
                     return result;
                 }
                 csharpCode = code;
             }
-            // else must be c#, Otherwise, an exception will be thrown (codeInfo.CodeType's getter)
+            else
+            {
+                // else must be c#, Otherwise, an exception will be thrown (codeFile.CodeType's getter)
+
+                csharpCode = csharpCode.TrimStart();
+                if (!csharpCode.StartsWith("namespace "))
+                {
+                    var ns = $"namespace {_blazorCompileServiceOptions.RootNamespace}; {Environment.NewLine}";
+                    csharpCode = ns + csharpCode;
+                }
+            }
 
             logs.Add(new CompileLog(Content: "generate csharp syntax tree"));
 
@@ -266,87 +291,42 @@ public class BlazorCompileService : ICompileService
                     specificDiagnosticOptions: new[]
                     {
                         new KeyValuePair<string, ReportDiagnostic>("CS1701", ReportDiagnostic.Suppress),
-                        new KeyValuePair<string, ReportDiagnostic>("CS1702", ReportDiagnostic.Suppress),
+                        // CS8019: 不需要的 using 指令
+                        new KeyValuePair<string, ReportDiagnostic>("CS8019", ReportDiagnostic.Suppress),
                     }
                 )
             );
-        var (assembly, _) = CompileToAssembly(
+
+        var (stream, _) = CompileCSharpToStream(
             compilation,
             syntaxTrees,
             _references,
             logs
         );
 
-        result.Assembly = assembly;
-        logs.Add(new CompileLog(Content: $"end compile {assemblyName}, result.Assembly is null:{result.Assembly == null}"));
+        result.Stream = stream;
+        logs.Add(new CompileLog(
+            $"end compile {assemblyName}, " +
+            $"result.Stream is null:{result.Stream == null}")
+        );
         return result;
 
-        #region two phase compilation
-        ////https://github.com/dotnet/razor/blob/6a5ccd98416f265b5c6ab8d06786e1ed19861363/src/Shared/Microsoft.AspNetCore.Razor.Test.Common/Language/IntegrationTests/RazorIntegrationTestBase.cs#L199 
-        //var baseCompilation = CSharpCompilation.Create(
-        //    _blazorCompileServiceOptions.RootNamespace,
-        //    Array.Empty<SyntaxTree>(),
-        //    _references,
-        //    new CSharpCompilationOptions(
-        //        OutputKind.DynamicallyLinkedLibrary,
-        //        optimizationLevel: OptimizationLevel.Release,
-        //        concurrentBuild: false,
-        //        specificDiagnosticOptions: new[]
-        //        {
-        //            new KeyValuePair<string, ReportDiagnostic>("CS1701", ReportDiagnostic.Suppress),
-        //            new KeyValuePair<string, ReportDiagnostic>("CS1702", ReportDiagnostic.Suppress),
-        //        }));
-
-        //var cSharpParseOptions = new CSharpParseOptions(LanguageVersion.Preview);
-        //List<SyntaxTree> AdditionalSyntaxTrees = new List<SyntaxTree>();
-
-        //// 第一阶段
-        //var projectEngine = this.CreateRazorProjectEngine(Array.Empty<MetadataReference>());
-        //RazorCodeDocument codeDocument = projectEngine.ProcessDeclarationOnly(file);
-
-        //var syntaxTree = (CSharpSyntaxTree)CSharpSyntaxTree.ParseText(
-        //    codeDocument.GetCSharpDocument().GeneratedCode,
-        //    cSharpParseOptions,
-        //    file.FilePath);
-        //AdditionalSyntaxTrees.Add(syntaxTree);
-
-        //baseCompilation = baseCompilation.AddSyntaxTrees(syntaxTree);
-        //var references = new List<MetadataReference>(_references)
-        //{
-        //    baseCompilation.ToMetadataReference()
-        //};
-
-
-        //// 第二阶段
-        //var engine2 = this.CreateRazorProjectEngine(references);
-        //var docs2 = engine2.Process(file);
-        //var t2 = CSharpSyntaxTree.ParseText(
-        //    docs2.GetCSharpDocument().GeneratedCode, 
-        //    cSharpParseOptions, 
-        //    file.FilePath
-        //    );
-        //baseCompilation = baseCompilation.AddSyntaxTrees(t2);
-
-
-        //using var peStream = new MemoryStream();
-        //baseCompilation.Emit(peStream);
-        //peStream.Seek(0, SeekOrigin.Begin);
-
-        //Assembly assembly1 = AppDomain.CurrentDomain.Load(peStream.ToArray());
-        //result.Assembly = assembly1; 
-        #endregion
+        // two phase compilation
+        // https://github.com/dotnet/razor/blob/6a5ccd98416f265b5c6ab8d06786e1ed19861363/src/Shared/Microsoft.AspNetCore.Razor.Test.Common/Language/IntegrationTests/RazorIntegrationTestBase.cs#L199 
     }
 
-    private (Assembly?, CSharpCompilation) CompileToAssembly(
+
+    private (MemoryStream?, CSharpCompilation) CompileCSharpToStream(
         CSharpCompilation baseCompilation,
         List<SyntaxTree> syntaxTrees,
         List<MetadataReference> references,
         List<CompileLog> logs)
     {
-        var compilation = baseCompilation.AddSyntaxTrees(syntaxTrees)
-            .AddReferences(_references);
+        var compilation = baseCompilation
+            .AddSyntaxTrees(syntaxTrees)
+            .AddReferences(references);
 
-        using var stream = new MemoryStream();
+        var stream = new MemoryStream();
         EmitResult emitResult = compilation.Emit(stream);
         if (DiagnosticHasError(compilation.GetDiagnostics(), logs))
         {
@@ -362,8 +342,34 @@ public class BlazorCompileService : ICompileService
         logs.Add(new CompileLog(Content: "CompileToAssembly success!"));
 
         stream.Seek(0, SeekOrigin.Begin);
-        var assembly = AppDomain.CurrentDomain.Load(stream.ToArray());
-        return (assembly, compilation);
+        return (stream, compilation);
+    }
+
+
+    private (string, IReadOnlyList<RazorDiagnostic>) CompileRazorToCSharp(CodeFile codeFile, List<CompileLog> logs)
+    {
+        Debug.Assert(_projectEngine != null);
+
+        logs.Add(new CompileLog(Content: $"begin compile razor {codeFile.FileName}"));
+
+        var file = new VirtualProjectItem(
+            codeFile.Code,
+            WorkSpace,
+            $"{WorkSpace}/{codeFile.FileName}",
+            $"{WorkSpace}/{codeFile.FileName}",
+            codeFile.FileName,
+            FileKinds.Component
+        );
+
+        var razorCodeDocument = _projectEngine.Process(file);
+        var cSharpDocument = razorCodeDocument.GetCSharpDocument();
+
+        logs.Add(new CompileLog(Content: "Get GeneratedCode..."));
+        var csCode = cSharpDocument.GeneratedCode;
+
+        logs.Add(new CompileLog(Content: $"end compile razor {codeFile.FileName}"));
+        logs.Add(new CompileLog(Content: $"razor csharp code: {Environment.NewLine} {csCode}"));
+        return (csCode, cSharpDocument.Diagnostics);
     }
 
     private bool DiagnosticHasError(IEnumerable<RazorDiagnostic> diagnostics, List<CompileLog> logs)
@@ -375,7 +381,7 @@ public class BlazorCompileService : ICompileService
         {
             LogLevel level = diagnostic.Severity == RazorDiagnosticSeverity.Warning
                 ? LogLevel.Warning : LogLevel.Error;
-            logs.Add(new CompileLog(Content: diagnostic.ToString(), level));
+            logs.Add(new CompileLog(Content: diagnostic.GetMessage(), level));
             if (diagnostic.Severity == RazorDiagnosticSeverity.Error)
             {
                 error = true;
@@ -403,9 +409,11 @@ public class BlazorCompileService : ICompileService
                 DiagnosticSeverity.Error => LogLevel.Error,
                 _ => LogLevel.Debug
             };
-            logs.Add(new CompileLog(diagnostic.ToString(), level));
+            
+            logs.Add(new CompileLog(diagnostic.GetMessage(), level));
             if (diagnostic.Severity == DiagnosticSeverity.Error)
             {
+                logs.Add(new CompileLog($"error source code:{Environment.NewLine}" + diagnostic.Location.SourceTree?.ToString(), level));
                 error = true;
             }
         }
@@ -417,29 +425,4 @@ public class BlazorCompileService : ICompileService
         return error;
     }
 
-    private (string, IReadOnlyList<RazorDiagnostic>) CompileRazorToCSharp(CodeInfo codeInfo, List<CompileLog> logs)
-    {
-        Debug.Assert(_projectEngine != null);
-
-        logs.Add(new CompileLog(Content: $"begin compile razor {codeInfo.FileName}"));
-
-        var file = new VirtualProjectItem(
-            codeInfo.Code,
-            WorkSpace,
-            $"{WorkSpace}/{codeInfo.FileName}",
-            $"{WorkSpace}/{codeInfo.FileName}",
-            codeInfo.FileName,
-            FileKinds.Component
-        );
-
-        var razorCodeDocument = _projectEngine.Process(file);
-        var cSharpDocument = razorCodeDocument.GetCSharpDocument();
-
-        logs.Add(new CompileLog(Content: "Get GeneratedCode..."));
-        var csCode = cSharpDocument.GeneratedCode;
-
-        logs.Add(new CompileLog(Content: $"end compile razor {codeInfo.FileName}"));
-        logs.Add(new CompileLog(Content: $"razor csharp code: {Environment.NewLine} {csCode}"));
-        return (csCode, cSharpDocument.Diagnostics);
-    }
 }

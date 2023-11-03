@@ -1,26 +1,24 @@
 ﻿@page "/"
 
-<TryBlazor @ref="_tryBlazor" ThrowError="false" OnCompile="@OnCompile" />
+<TryBlazor @ref="_tryBlazor"
+           DefaultValue="@DefaultVal"
+           ThrowError="false"
+           OnCompiled="@OnCompiled" />
 
-<hr/>
+<hr stye="margin: 0 1rem;" />
+
+<TryBlazorMultiFile @ref="_tryBlazorMultiFile"
+                    CodeFiles="@_codeFiles"
+                    OnCompiled="@OnMultiFileCompiled"
+                    DefaultRender="false"
+                    />
+
+<hr stye="margin: 0 1rem;" />
 
 <div>
-    <pre>@_logs</pre> 
+    @_compileContent
 </div>
 
-@code
-{
-    TryBlazor? _tryBlazor;
-
-    private string _logs = "";
-
-
-    private void OnCompile()
-    {
-        if (_tryBlazor != null)
-        {
-            var logs = _tryBlazor.Logs;
-            _logs = string.Join("\r\n", logs);
-        }
-    }
-}
+<div>
+    <pre>@_logs</pre>
+</div>

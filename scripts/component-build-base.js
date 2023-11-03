@@ -68,7 +68,7 @@ const createTsConfig = libItem => {
   return {
     configFile: false,
     plugins: [],
-    build: {
+      build: {
       emptyOutDir: false,
       outDir: libItem.outDir,
       sourcemap: true,

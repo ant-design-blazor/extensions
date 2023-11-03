@@ -23,13 +23,8 @@ a, button {
 }
 
 
-.bm-plain-anchor {
+.plain-anchor {
   color: unset;
   transition: none;
 }
 
-a {
-  color: #1677ff;
-  color: var(--primary);
-  transition: opacity .2s ease-in-out;
-}

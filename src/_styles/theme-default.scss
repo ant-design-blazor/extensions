@@ -1,33 +1,39 @@
 @import "./theme-common.scss";
 
-
 :root {
-    --primary: #1677ff;
-    --secondary: #6c757d;
+    /* color theme */
+    --default: #fff;
+    --primary: #0c66e4;
+    --secondary: #44546f;
     --info: #0dcaf0;
     --success: #00b578;
-    --warning: #ffc107;
-    --danger: #dc3545;
-    --light: #f8f9fa;
-    --dark: #212529;
+    --warning: #e2b203;
+    --danger: #ca3521;
+    --light: #f7f8f9;
+    --dark: #091e42;
     --weak: #999;
-
-    --color-box: #f5f5f5;
-
+    /* color hover*/
+    --default-hovered: rgba(9, 30, 66, 0.06);
+    --primary-hovered: #0055cc;
+    --secondary-hovered: #2c3e5d;
+    /*border*/
     --border-color: #efefef;
-    --border-radius: 0.25rem;
+    --border-radius: 4px;
     --border-width: 1px;
     --border-style: solid;
-
-    --color-main-background: #fff;
-    --color-main-text: #000;
-    --color-main-text-reverse: #fff;
-
-    --color-active-backgroup: #eee;
-    --color-light-text: #ccc;
-    --color-weak-text: var(--weak);
-    --color-gray-dark: #333;
-
-    --gap: 8px;
+    /* text  */
+    --text-color-main: #000;
+    --text-color-main-reverse: #fff;
+    --text-color-weak: var(--weak);
+    --text-color-weak: var(--weak);
+    --text-color-active: #0c66e4;
+    --text-color-disable: #rgba(9, 30, 66, 0.31);
+    /*background*/
+    --bg-color-active: #e9f2ff;
+    --bg-color-disable: rgba(9, 30, 66, 0.03);
+    /*other*/
+    --gap: 0.5rem;
+    --padding: 0.25rem 0.5rem;
     --z-index: 1000;
+    --color-box: #f5f5f5;
 }

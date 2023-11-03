@@ -1,0 +1,44 @@
+﻿<div class="@($"{ClsPrefix}-container")">
+    <section>
+        @if (IsCompiling)
+        {
+            <div class="@($"{ClsPrefix}-mask")">
+                <div class="spinner-spin">
+                    <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="8" cy="8" r="7"></circle>
+                    </svg>
+                </div>
+            </div>
+        }
+        <div class="@($"{ClsPrefix}-tools")">
+            <div class="@($"{ClsPrefix}-tabs")">
+                @if (RenderTabs)
+                {
+                    foreach (var codeInfo in CodeFileList)
+                    {
+                        <span @key="@codeInfo.FileName"
+                              class="@($"{ClsPrefix}-tab {(codeInfo.FileName == ActiveKey ? "active" : "")}")"
+                              @onclick="@(async () => await OnTabChange(codeInfo.FileName))">
+                            @codeInfo.FileName
+                        </span>
+                    }
+                }
+            </div>
+            <div class="@($"{ClsPrefix}-buttons")">
+                <button class="code-run" @onclick="@Compile">Run</button>
+            </div>
+        </div>
+
+
+        <MonacoEditor @ref="@MonacoEditor"
+                      Style="@($"height:300px; {Style}")"
+                      Language="@Language"
+                      Options="@Options"/>
+    </section>
+    @if (DefaultRender)
+    {
+        <section style="margin: 1rem;">
+            @CompiledContent
+        </section>
+    }
+</div>

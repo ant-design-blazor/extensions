@@ -14,9 +14,13 @@ public enum CodeType
     CSharp = 1,
 }
 
-public class CodeInfo
+public class CodeFile
 {
-    public CodeInfo(string code, string fileName)
+    public CodeFile():this("","")
+    {
+        
+    }
+    public CodeFile(string code, string fileName)
     {
         this.Code = code;
         this.FileName = fileName;
@@ -28,7 +32,7 @@ public class CodeInfo
 
     private CodeType? _codeType;
 
-    internal CodeType CodeType
+    public CodeType CodeType
     {
         get
         {

@@ -17,18 +17,22 @@ public class BlazorCompileServiceOptions
     /// <summary>
     /// 
     /// </summary>
-    public List<Assembly> AdditionalAssemblys { get; set; } = new ();
+    public List<Assembly> AdditionalAssemblies { get; set; } = new ();
 
 
     public bool LazyInitRazorProjectEngine = true;
 
 
-    public const string DefaultImportsStr = @"@using Microsoft.AspNetCore.Components.Forms
+    public const string DefaultImportsStr = """
+@using System.Net.Http
+@using System.Net.Http.Json
+@using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @using Microsoft.AspNetCore.Components.WebAssembly.Http
-@using Microsoft.JSInterop";
+@using Microsoft.JSInterop
+""";
 
     private string[]? _defaultImports = null;
     /// <summary>

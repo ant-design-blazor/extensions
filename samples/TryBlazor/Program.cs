@@ -12,9 +12,9 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 builder.Services.AddBlazorCompileService((options) =>
 {
-    options.RootNamespace = "AntDesignDemo";
+    options.RootNamespace = StringUtils.RootNsName;
     options.AdditionalImports = new[] { "@using AntDesign" };
-    options.AdditionalAssemblys = new List<Assembly>()
+    options.AdditionalAssemblies = new List<Assembly>()
     {
         typeof(AntDesign.Button).Assembly
     };

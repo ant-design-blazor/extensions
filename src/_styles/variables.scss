@@ -1,8 +1,5 @@
 $prefix: "antd-ext";
 
-$themm-bg-color: var(--color-main-background);
-$themm-text-color: var(--color-main-text);
-
 // color
 $theme-colors: (
     "primary": var(--primary), 
@@ -14,9 +11,3 @@ $theme-colors: (
     "light": var(--light), 
     "dark": var(--dark), 
 );
-
-
-// border
-$border-radius: 0.25rem;
-$border-width: 1px;
-$border-style: solid;

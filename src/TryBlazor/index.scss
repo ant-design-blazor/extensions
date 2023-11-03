@@ -1,0 +1,80 @@
+﻿$cls-prefix: #{$prefix}-try-blazor;
+
+
+.#{$cls-prefix}-container {
+    --try-blazor-light: var(--light);
+    --try-blazor-tools-bg-color: var(--try-blazor-light);
+    --try-blazor-bg-color-active: var(--bg-color-active);
+    position: relative;
+
+    .spinner-spin {
+        width: 1.5rem;
+        height: 1.5rem;
+        display: inline-flex;
+        vertical-align: middle;
+        transform-origin: center center;
+        animation: spinner-spin-keyframe .86s cubic-bezier(.4, .15, .6, .85) infinite;
+
+        circle {
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2px;
+            stroke-dasharray: 60;
+            stroke-dashoffset: 50;
+            stroke-linecap: round;
+        }
+    }
+
+    .#{$cls-prefix}-mask {
+        background: rgba(255, 255, 255, 0.5);
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        z-index: 100;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    & > section:not(:last-child) {
+        margin-bottom: 1rem;
+        position: relative;
+    }
+
+    .#{$cls-prefix}-tools {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: var(--try-blazor-tools-bg-color);
+
+        .#{$cls-prefix}-tabs {
+            > span {
+                padding: var(--padding);
+                cursor: pointer;
+
+                &.active {
+                    background-color: var(--try-blazor-bg-color-active);
+                }
+            }
+        }
+    }
+
+
+    button.code-run {
+        padding: 0.25rem 0.5rem;
+        background-color: var(--primary);
+        color: var(--text-color-main-reverse);
+        border: none;
+        border-radius: 0;
+
+        &:hover {
+            background-color: var(--primary-hovered);
+        }
+    }
+
+    @keyframes spinner-spin-keyframe {
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+}

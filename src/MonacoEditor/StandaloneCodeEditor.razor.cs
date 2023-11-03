@@ -40,7 +40,7 @@ public class StandaloneCodeEditor : ComponentBase, IAsyncDisposable
         builder.Fluent()
             .OpenElement("div")
             .AddAttribute("id", Id)
-            .AddAttribute("class", $"{Constants.ClsPrefix}code-editor {Class}")
+            .AddAttribute("class", $"{Constants.ClsPrefix}-monaco-editor {Class}")
             .AddAttribute("style", $"height:{Height}; {Style}")
             .CloseElement();
     }
