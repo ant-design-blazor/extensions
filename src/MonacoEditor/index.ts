@@ -1,61 +1,81 @@
-﻿import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+﻿import { onReady } from "../../scripts/util";
+
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 // import "monaco-editor/esm/vs/basic-languages/javascript/javascript.contribution";
 // import 'monaco-editor/esm/vs/editor/contrib/find/findController';
 
-const getMonaco = () => (window as any).monaco as any;
+
+const getMonaco = () => {
+    return (window as any).monaco as any;
+}
 
 const defaultOptions: any = {
-  language: "javascript",
-  theme: "vs",
-  automaticLayout: true,
-  minimap: {
-    // 关闭代码缩略图
-    enabled: false, // 是否启用预览图
-  },
+    language: "javascript",
+    theme: "vs",
+    automaticLayout: true,
+    minimap: {
+        // 关闭代码缩略图
+        enabled: false, // 是否启用预览图
+    },
 };
 
-export const init = (id: string, options: any) => {
-  return new CodeEditor(id, options);
+export const init = (dotnetObj: any, id: string, options: any) => {
+    const editor = new CodeEditor(id, options);
+
+    onReady(() => {
+        editor.initMonaco();
+        dotnetObj.invokeMethodAsync("Ready")
+    });
+
+    return editor;
 };
 
 export class CodeEditor {
-  private _id: string;
-  private _editor: monaco.editor.IStandaloneCodeEditor;
-  /**
-   *
-   */
-  constructor(id: string, options: any) {
-    var othersOptions = options.othersOptions ?? {};
-    othersOptions.language = options.language;
-    othersOptions.theme = options.theme;
-    const mergeOption = Object.assign(defaultOptions, othersOptions);
-    if (!id) {
-      throw "codeEditor id is null";
+    private _id: string;
+    private _editor: monaco.editor.IStandaloneCodeEditor | null = null;
+    private editorOptions: any;
+
+    /**
+     *
+     */
+    constructor(id: string, options: any) {
+        var othersOptions = options.othersOptions ?? {};
+        othersOptions.language = options.language;
+        othersOptions.theme = options.theme;
+        this.editorOptions = othersOptions;
+        if (!id) {
+            throw "codeEditor id is null";
+        }
+        console.log(options);
+        this._id = id;
     }
-    const ele = document.getElementById(id);
-    if (!ele) {
-      throw "element not found for " + id;
+
+    initMonaco() {
+        const ele = document.getElementById(this._id);
+        if (!ele) {
+            throw "element not found for " + this._id;
+        }
+        const mergeOption = Object.assign(defaultOptions, this.editorOptions);
+        this._editor = getMonaco().editor.create(ele, mergeOption);
     }
-    this._id = id;
-    this._editor = getMonaco().editor.create(ele, mergeOption);
-  }
 
-  setValue(val: string) {
-    this._editor.getModel()?.setValue(val);
-  }
-
-  getValue() {
-    return this._editor.getModel()?.getValue();
-  }
-
-  setLanguage(language: string) {
-    const model = this._editor.getModel();
-    if (model) {
-      getMonaco().editor.setModelLanguage(model, language);
+    setValue(val: string) {
+        this._editor!.getModel()?.setValue(val);
     }
-  }
 
-  dispose() {
-    this._editor.dispose();
-  }
+    getValue() {
+        return this._editor!.getModel()?.getValue();
+    }
+
+    async setLanguage(language: string) {
+        console.log("language", language);
+        const model = this._editor!.getModel();
+        if (model) {
+            (getMonaco()).editor.setModelLanguage(model, language);
+        }
+    }
+
+    dispose() {
+        this._editor?.dispose();
+    }
 }

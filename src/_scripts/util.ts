@@ -26,3 +26,12 @@ export const canUseDom = !!(
   window.document &&
   window.document.createElement
 )
+
+
+export const onReady = (eventHandler: () => void) => {
+    if (document.readyState !== 'loading') {
+        eventHandler();
+    } else {
+        document.addEventListener('DOMContentLoaded', eventHandler);
+    }
+}

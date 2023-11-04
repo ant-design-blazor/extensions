@@ -31,8 +31,9 @@ public class StandaloneCodeEditor : ComponentBase, IAsyncDisposable
 
     public IJSObjectReference? JsMirror { get; private set; }
 
-    private TaskCompletionSource<bool> _isReadyTcs = new (false);
+    private TaskCompletionSource<bool> _isReadyTcs = new(false);
     public Task<bool> IsReady => _isReadyTcs.Task;
+    private DotNetObjectReference<StandaloneCodeEditor>? _dotNetObject;
 
 
     protected override void BuildRenderTree(RenderTreeBuilder builder)
@@ -49,16 +50,17 @@ public class StandaloneCodeEditor : ComponentBase, IAsyncDisposable
     {
         if (firstRender)
         {
+            _dotNetObject = DotNetObjectReference.Create(this);
             JsMirror = await JsRuntime.InvokeAsync<IJSInProcessObjectReference>(
-                "window.AntDesign.ext.MonacoEditor.init", Id,
+                "window.AntDesign.ext.MonacoEditor.init",
+                _dotNetObject,
+                Id,
                 new
                 {
                     theme = Theme,
                     language = Language,
                     othersOptions = Options
                 });
-
-            _isReadyTcs.SetResult(true);
         }
     }
 
@@ -122,6 +124,11 @@ public class StandaloneCodeEditor : ComponentBase, IAsyncDisposable
 
     #endregion
 
+    [JSInvokable]
+    public void Ready()
+    {
+        _isReadyTcs.SetResult(true);
+    }
 
     public async ValueTask DisposeAsync()
     {
@@ -129,6 +136,11 @@ public class StandaloneCodeEditor : ComponentBase, IAsyncDisposable
         {
             await JsMirror.InvokeVoidAsync("dispose");
             await JsMirror.DisposeAsync();
+        }
+
+        if (_dotNetObject != null)
+        {
+            _dotNetObject.Dispose();
         }
         GC.SuppressFinalize(this);
     }
