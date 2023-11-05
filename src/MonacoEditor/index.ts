@@ -46,7 +46,7 @@ export class CodeEditor {
         if (!id) {
             throw "codeEditor id is null";
         }
-        console.log(options);
+        //console.log(options);
         this._id = id;
     }
 

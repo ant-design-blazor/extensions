@@ -36,6 +36,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/editor/editor.main.js"
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <script>
+        const ready = (eventHandler) => {
+            if (document.readyState !== 'loading') {
+                eventHandler();
+            } else {
+                document.addEventListener('DOMContentLoaded', eventHandler);
+            }
+        }
+    </script>
+    <script src="antd-blazor.js"></script>
+
     <script src="_content/AntDesign.Extensions.Components.MonacoEditor/dist/index.js"></script>
 
     <script src="_framework/blazor.webassembly.js"></script>
