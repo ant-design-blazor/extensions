@@ -5,8 +5,8 @@ export const MoveEleTo = (
     ref: HTMLElement | string,
     container: HTMLElement | string
 ) => {
-    let ele = getEle(ref);
-    let c = getEle(container);
+    const ele = getEle(ref);
+    const c = getEle(container);
     if (ele && c) {
         c.append(ele);
     } 

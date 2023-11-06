@@ -39,7 +39,7 @@ export class CodeEditor {
      *
      */
     constructor(id: string, options: any) {
-        var othersOptions = options.othersOptions ?? {};
+        const othersOptions = options.othersOptions ?? {};
         othersOptions.language = options.language;
         othersOptions.theme = options.theme;
         this.editorOptions = othersOptions;
