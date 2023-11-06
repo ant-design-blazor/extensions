@@ -1,6 +1,6 @@
 # how to run samples
 
-1. `npm install`
-2. `npm run build-proj`
+1. `pnpm install`
+2. `pnpm run build-proj`
 3. `cd samples\{Component} && dotnet run`
 
