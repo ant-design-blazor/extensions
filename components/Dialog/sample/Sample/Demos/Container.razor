@@ -1,0 +1,16 @@
+﻿<div id="container">
+</div>
+
+<AntDesign.Button OnClick="@(() => _visible = true)">
+    Open
+</AntDesign.Button>
+<AntDesign.Extensions.Dialog Title="@("Title")"
+                             @bind-Visible="@_visible"
+                             Container="@("#container")">
+
+    somg conent
+</AntDesign.Extensions.Dialog>
+
+@code {
+    private bool _visible = false;
+}

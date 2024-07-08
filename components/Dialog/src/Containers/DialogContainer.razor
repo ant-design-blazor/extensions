@@ -1,0 +1,64 @@
+﻿@namespace AntDesign.Extensions
+
+@implements IDisposable
+@inject IContainerRegistry Dispatcher
+
+
+@foreach (var fragment in _fragments)
+{
+    var dialogOptions = (DialogOptions)fragment;
+
+    <AntDesign.Extensions.Dialog @key="@fragment.Key"
+                                 ShowMask="@dialogOptions.ShowMask"
+                                 MaskClosable="@dialogOptions.MaskClosable"
+                                 MaskClass="@dialogOptions.MaskClass"
+                                 MaskStyle="@dialogOptions.MaskStyle"
+                                 Visible="@dialogOptions.Visible"
+                                 VisibleChanged="@dialogOptions.VisibleChanged"
+                                 Title="@dialogOptions.Title"
+                                 HeaderClass="@dialogOptions.HeaderClass"
+                                 HeaderStyle="@dialogOptions.HeaderStyle"
+                                 Footer="@dialogOptions.Footer"
+                                 FooterClass="@dialogOptions.FooterClass"
+                                 FooterStyle="@dialogOptions.FooterStyle"
+                                 OnOk="@(dialogOptions.OnOk!)"
+                                 OnCancel="@(dialogOptions.OnCancel!)"
+                                 OkText="@dialogOptions.OkText"
+                                 CancelText="@dialogOptions.CancelText"
+                                 Mode="@dialogOptions.Mode"
+                                 Center="@dialogOptions.Center"
+                                 Top="@dialogOptions.Top"
+                                 Width="@dialogOptions.Width"
+                                 DestroyOnClose="@dialogOptions.DestroyOnClose"
+                                 Container="@dialogOptions.Container">
+        @if (dialogOptions.ChildContent.IsT0)
+        {
+            @dialogOptions.ChildContent.AsT0
+        }
+        else
+        {
+            @dialogOptions.ChildContent.AsT1
+        }
+    </AntDesign.Extensions.Dialog>
+}
+
+@code {
+    private IEnumerable<FragmentOptions> _fragments = new List<FragmentOptions>();
+    private IDisposable? _subscription;
+
+    protected override void OnInitialized()
+    {
+        _subscription = Dispatcher.Subscribe(DialogService.Name, UpdateFragments);
+    }
+
+    private void UpdateFragments(FragmentsChangeArgs e)
+    {
+        _fragments = e.Fragments;
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        _subscription?.Dispose();
+    }
+}

@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <PropertyGroup>
+        <PackageId>AntDesign.Extensions.Dialog</PackageId>
+        <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+        <PackageId>AntDesign.Extensions.Components.MonacoEditor</PackageId>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <SupportedPlatform Include="browser" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+    </ItemGroup>
+
+
+    <ItemGroup Condition="'$(Configuration)'=='Release'">
+        <Compile Remove="wwwroot\src\**" />
+        <Content Remove="wwwroot\src\**" />
+        <EmbeddedResource Remove="wwwroot\src\**" />
+        <None Remove="wwwroot\src\**" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Common\src\AntDesign.Extensions.Components.Common.csproj" />
+    </ItemGroup>
+</Project>

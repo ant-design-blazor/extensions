@@ -1,0 +1,88 @@
+﻿@page "/dialogForm"
+@implements IDisposable
+@rendermode InteractiveAuto
+@inject IDialogFormService DialogFormService
+@inject IServiceProvider ServiceProvider
+
+@using AntDesign.Extensions.Samples.Client.Demos.DialogForms
+
+<Divider Orientation="left" Style="font-weight:bold">DialogForm</Divider>
+<Paragraph>
+    类似 WinFrom 一样使用 Dialog 
+</Paragraph>
+<Row>
+    <Col Span="8">
+    <Card Bordered="false" Title="仅在 Wasm 模式可用">
+        <Extra>
+        </Extra>
+        <Body>
+            <AntDesign.Button OnClick="@OpenWasm">
+                Can only be used in Wasm mode
+            </AntDesign.Button>
+        </Body>
+    </Card>
+    </Col>
+    <Col Span="8">
+    <Card Bordered="false" Title="Wasm 和 Server 模式可用">
+        <Extra>
+        </Extra>
+        <Body>
+            <AntDesign.Button OnClick="@OpenUniversal">
+                Universal 1 (under Server and Wasm)
+            </AntDesign.Button>
+        </Body>
+    </Card>
+    </Col>
+    <Col Span="8">
+    <Card Bordered="false" Title="关闭 Mask">
+        <Extra>
+        </Extra>
+        <Body>
+            <AntDesign.Button OnClick="@OpenUniversal2">
+                Universal 2 (under Server and Wasm)
+            </AntDesign.Button>
+        </Body>
+    </Card>
+    </Col>
+</Row>
+
+@code{
+    DialogFormBase? wasmForm = null;
+    async Task OpenWasm()
+    {
+        if (wasmForm == null)
+        {
+            wasmForm = new PureDialogForm();
+        }
+        await wasmForm.ShowAsync();
+    }
+
+
+    DialogFormBase? universalForm = null;
+    async Task OpenUniversal()
+    {
+        if (universalForm == null)
+        {
+            universalForm = new PureDialogForm(ServiceProvider);
+        }
+        await universalForm.ShowAsync();
+    }
+
+
+    DialogFormBase? universalForm2 = null;
+    async Task OpenUniversal2()
+    {
+        if (universalForm2 == null)
+        {
+            universalForm2 = DialogFormService.New<MyDialogForm>();
+        }
+        await universalForm2.ShowAsync();
+    }
+
+    public void Dispose()
+    {
+        wasmForm?.Dispose();
+        universalForm?.Dispose();
+        universalForm2?.Dispose();
+    }
+}

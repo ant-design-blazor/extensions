@@ -1,0 +1,74 @@
+﻿@namespace AntDesign.Extensions
+
+@if (Options.Mode == DialogMode.Normal)
+{
+    <div class="@_mainClass" style="@_mainStyle">
+        @if (Options.IsPure)
+        {
+            @ChildContent
+        }
+        else
+        {
+            @if (Options.Header != null)
+            {
+                <div class="@_headerClass" style="@_headerStyle">
+                    @Options.Header
+                </div>
+            }
+
+            <div class="@_contentClass" style="@_contentStyle">
+                @ChildContent
+            </div>
+
+            @if (Options.Footer != null)
+            {
+                <div class="@_footerClass" style="@_footerStyle">
+                    @Options.Footer
+                </div>
+            }
+        }
+    </div>
+}
+else
+{
+    <div id="@Id" class="@($"{Options.ClsPrefix}-root")">
+        @if (Options.ShowMask && Options.Mode == DialogMode.Modal)
+        {
+            <div class="@_maskClass" style="@_maskStyle"></div>
+        }
+        <div class="@($"{Options.ClsPrefix}-wrapper")" style="@( Options.Mode == DialogMode.Dialog ? "pointer-events: none" : "")"
+             @onmouseup="@OnMaskMouseUp">
+            <div class="@_positionClass" style="@_positionStyle"
+            @onclick:stopPropagation
+                 @onmousedown="@EventUtil.AsNonRenderingEventHandler(OnDialogMouseDown)">
+
+                <div class="@_mainClass" style="@_mainStyle">
+                    @if (Options.IsPure)
+                    {
+                        @ChildContent
+                    }
+                    else
+                    {
+                        @if (Options.Header != null)
+                        {
+                            <div class="@_headerClass" style="@_headerStyle">
+                                @Options.Header
+                            </div>
+                        }
+
+                        <div class="@_contentClass" style="@_contentStyle">
+                            @ChildContent
+                        </div>
+
+                        @if (Options.Footer != null)
+                        {
+                            <div class="@_footerClass" style="@_footerStyle">
+                                @Options.Footer
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}

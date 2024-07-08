@@ -1,0 +1,15 @@
+﻿@namespace AntDesign.Extensions
+
+<div>
+    <div class="@($"{ClsPrefix}-title")">@Title</div>
+    <div class="@($"{ClsPrefix}-tools")">
+        @if(Tools == null)
+        {
+            <span @onclick="@OnCancelBtnClick">x</span>
+        }
+        else
+        {
+            @Tools
+        }
+    </div>
+</div>

@@ -1,0 +1,20 @@
+﻿<AntDesign.Button OnClick="@(() => _visible = true)">
+    Open
+</AntDesign.Button>
+<AntDesign.Extensions.Dialog Title="Title"
+                             @bind-Visible="@_visible"
+                             MaskClass="@("custom-mask-class")"
+                             MaskStyle="@("background-color: #ffffff;")">
+    somg conent
+</AntDesign.Extensions.Dialog>
+
+<style>
+    .custom-mask-class {
+        opacity: 0.8;
+    }
+</style>
+
+@code {
+    private bool _visible = false;
+
+}

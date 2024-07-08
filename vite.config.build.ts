@@ -2,13 +2,12 @@ import { defineConfig } from "vite";
 
 const path = require("path");
 const atImport = require("postcss-import");
-const { banner, projRootDirName, projRootDir }  = require("./scripts/common")
-
+const { banner, projRootDirName, projRootDir } = require("./scripts/common")
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
-  var isProd = mode === "production";
-  console.log("isProd", isProd)
+export default defineConfig(({ command, mode }) => {
+  var isProd = mode === 'production';
+  console.log("process.env", process.env);
   return {
     resolve: {
       alias: [
@@ -16,13 +15,10 @@ export default defineConfig(({ mode }) => {
           find: "@",
           replacement: path.resolve(
             __dirname,
-            `./${projRootDir}/bundle/src`
+            `./${projRootDir}/_bundle/src`
           ),
         },
       ],
-    },
-    esbuild: {
-      drop: isProd ? ["console", "debugger"] : [],
     },
     css: {
       preprocessorOptions: {
@@ -35,18 +31,16 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-  plugins: [],
+    plugins: [],
     build: {
+      minify: isProd,
       sourcemap: !isProd,
-      emptyOutDir: true,
-      minify: true,
+      emptyOutDir: false,
       outDir: `./dist`,
       rollupOptions: {
         input: {
-          entry:{
-            index: `./${projRootDir}/bundle/src/index.ts`,
-            default:`./${projRootDir}/bundle/src/default.scss`,
-          }
+          index: `./${projRootDir}/_bundle/src/index.ts`,
+          default: `./${projRootDir}/_bundle/src/default.scss`,
         },
         output: {
           banner,
@@ -56,7 +50,6 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-  };
-});
-
-
+  }
+}
+);

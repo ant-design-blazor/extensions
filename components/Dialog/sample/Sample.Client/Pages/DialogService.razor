@@ -1,0 +1,56 @@
+﻿@page "/dialogService"
+@implements IDisposable
+@rendermode InteractiveAuto
+@inject IDialogService dialogService
+
+@using AntDesign.Extensions.Samples.Client.Demos.DialogForms
+
+<Divider Orientation="left" Style="font-weight:bold">DialogForm</Divider>
+<Paragraph>
+    DialogService
+</Paragraph>
+<Row>
+    <Col Span="8">
+    <Card Bordered="false" Title="仅在 Wasm 模式可用">
+        <Extra>
+        </Extra>
+        <Body>
+            <AntDesign.Button OnClick="@Open">
+                DialogService.Create
+            </AntDesign.Button>
+        </Body>
+    </Card>
+    </Col>
+    <Col Span="8">
+
+    </Col>
+    <Col Span="8">
+  
+    </Col>
+</Row>
+
+@code{
+    IDialogRef? dialogRef = null;
+    void Open()
+    {
+        if (dialogRef == null)
+        {
+            var options = new DialogOptions()
+            {
+                Title = "dialog title",
+                ChildContent = "body"
+            };
+
+            dialogRef = dialogService.Create(options);
+
+        }
+        dialogRef.Open()
+            .AutoRemoveOnLocationChanged(); // 等价于在 Dispose 调用 Destroy()
+    }
+
+    public void Dispose()
+    { 
+        // 清理 modal DOM
+        // dialogRef?.Destroy();
+    }
+}

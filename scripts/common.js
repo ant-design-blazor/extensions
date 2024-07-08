@@ -3,10 +3,10 @@ const fs = require('fs')
 const config = require('../package.json')
 
 // 全局变量挂载点
-const globalMount = "AntDesign.ext"
+const globalMount = "antd.ext"
 const projRootDirName = ""
-const projRootDir = projRootDirName ? `src/${projRootDirName}`: "src";
-const ignoreDir = ["_scripts", "_styles", "wwwroot", "bundle", "Common"]
+const projRootDir = projRootDirName ? `components/${projRootDirName}`: "components";
+const ignoreDir = ["_scripts", "_styles",  "_bundle", "wwwroot", "bundle", "Common"]
 // console.log("projRootDir", projRootDir);
 
 const getAllComponentsName = () => {
@@ -23,7 +23,7 @@ const getAllComponentsName = () => {
   })
 }
 
-// console.log("getAllComponentsName", getAllComponentsName());
+console.log("getAllComponentsName", getAllComponentsName());
 
 const org = "ant-design-blazor"
 

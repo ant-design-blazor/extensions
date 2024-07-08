@@ -1,0 +1,200 @@
+﻿@page "/"
+@using AntDesign.Extensions.Samples.Demos
+@rendermode InteractiveServer
+
+<Divider Orientation="left" Style="font-weight:bold">模式</Divider>
+<Paragraph>
+    三种使用模式：
+</Paragraph>
+<Row Gutter="(16, 16)">
+    <Col Span="8">
+    <Card Bordered="false" Title="Modal 模式（默认模式）">
+        <Extra>
+        </Extra>
+        <Body>
+            <ModeModal />
+        </Body>
+    </Card>
+    </Col>
+
+    <Col Span="8">
+    <Card Bordered="false" Title="Dialog 模式">
+        <Extra>
+        </Extra>
+        <Body>
+            <ModeDialog />
+        </Body>
+    </Card>
+    </Col>
+
+    <Col Span="8">
+    <Card Bordered="false" Title="Normal 模式">
+        <Extra>
+        </Extra>
+        <Body>
+            <ModeNormal />
+        </Body>
+    </Card>
+    </Col>
+</Row>
+
+
+<Divider Orientation="left" Style="font-weight:bold">Mask</Divider>
+<Paragraph>
+    Mask 只对 Modal 模式生效
+</Paragraph>
+<Row>
+    <Col Span="8">
+    <Card Bordered="false" Title="禁用 MaskClick">
+        <Extra>
+        </Extra>
+        <Body>
+            <MaskClosable />
+        </Body>
+    </Card>
+    </Col>
+    <Col Span="8">
+    <Card Bordered="false" Title="自定义 MaskStyle">
+        <Extra>
+        </Extra>
+        <Body>
+            <MaskStyle />
+        </Body>
+    </Card>
+    </Col>
+    <Col Span="8">
+    <Card Bordered="false" Title="关闭 Mask">
+        <Extra>
+        </Extra>
+        <Body>
+            <MaskShowMask />
+        </Body>
+    </Card>
+    </Col>
+</Row>
+
+<Divider Orientation="left" Style="font-weight:bold">Header</Divider>
+<Row>
+    <Col Span="8">
+    <Card Bordered="false" Title="关闭 Header">
+        <Extra>
+        </Extra>
+        <Body>
+            <HeaderTitle />
+        </Body>
+    </Card>
+    </Col>
+    <Col Span="8">
+    <Card Bordered="false" Title="自定义 Header 样式">
+        <Extra>
+        </Extra>
+        <Body>
+            <HeaderStyle />
+        </Body>
+    </Card>
+    </Col>
+</Row>
+
+
+<Divider Orientation="left" Style="font-weight:bold">Content</Divider>
+<Row>
+    <Col Span="8">
+    <Card Bordered="false" Title="自定义 Content 样式">
+        <Extra>
+        </Extra>
+        <Body>
+            <ContentStyle />
+        </Body>
+    </Card>
+    </Col>
+</Row>
+
+
+
+<Divider Orientation="left" Style="font-weight:bold">Footer</Divider>
+<Row>
+    <Col Span="8">
+    <Card Bordered="false" Title="隐藏 Footer">
+        <Extra>
+        </Extra>
+        <Body>
+            <FooterNull />
+        </Body>
+    </Card>
+    </Col>
+    <Col Span="8">
+    <Card Bordered="false" Title="自定义 Footer">
+        <Extra>
+        </Extra>
+        <Body>
+            <FooterCustom />
+        </Body>
+    </Card>
+    </Col>
+    <Col Span="8">
+    <Card Bordered="false" Title="自定义 Footer 样式">
+        <Extra>
+        </Extra>
+        <Body>
+            <FooterStyle />
+        </Body>
+    </Card>
+    </Col>
+</Row>
+
+
+
+<Divider Orientation="left" Style="font-weight:bold">位置</Divider>
+<Row>
+    <Col Span="8">
+    <Card Bordered="false" Title="顶部距离">
+        <Extra>
+        </Extra>
+        <Body>
+            <PositionTop />
+        </Body>
+    </Card>
+    </Col>
+    <Col Span="8">
+    <Card Bordered="false" Title="宽度">
+        <Extra>
+        </Extra>
+        <Body>
+            <PositionWidth />
+        </Body>
+    </Card>
+    </Col>
+    <Col Span="8">
+    <Card Bordered="false" Title="居中">
+        <Extra>
+        </Extra>
+        <Body>
+            <PositionCenter />
+        </Body>
+    </Card>
+    </Col>
+</Row>
+
+
+
+<Divider Orientation="left" Style="font-weight:bold">其他</Divider>
+<Row>
+    <Col Span="8">
+    <Card Bordered="false" Title="DestroyOnClose">
+        <Extra>
+        </Extra>
+        <Body>
+            <DestroyOnClose />
+        </Body>
+    </Card>
+    </Col>
+    <Col Span="8">
+    <Card Bordered="false" Title="指定 Container">
+        <Extra>
+        </Extra>
+        <Body>
+            <Container />
+        </Body>
+    </Card>
+    </Col>
+</Row>

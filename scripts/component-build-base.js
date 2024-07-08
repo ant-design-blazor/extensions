@@ -12,13 +12,13 @@ const getAllComponentsEntryFiles = (entryFileName) => {
   const libraries = [];
 
   getAllComponentsName().forEach(function (componentName, index) {
-    const entryFile = `./${projRootDir}/${componentName}/wwwroot/src/${entryFileName}`;
+    const entryFile = `./${projRootDir}/${componentName}/src/wwwroot/src/${entryFileName}`;
 
     libraries.push({
       entry: entryFile,
       name: componentName,
       fileName: componentName,
-      outDir: `./${projRootDir}/${componentName}/wwwroot/dist/`
+      outDir: `./${projRootDir}/${componentName}/src/wwwroot/dist/`
     })
   })
   return libraries;

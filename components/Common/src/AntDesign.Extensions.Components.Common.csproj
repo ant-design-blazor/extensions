@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+    <PropertyGroup>
+      <LangVersion>latest</LangVersion>
+      <PackageId>AntDesign.Extensions.Components.Common</PackageId>
+    </PropertyGroup>
+    <ItemGroup>
+      <Script Remove="ContainerMode\Abstract\IDialogRef.cs" />
+      <Script Remove="ContainerMode\ContainerRegistry.cs" />
+      <Script Remove="ContainerMode\ContainerServiceBase.cs" />
+      <Script Remove="ContainerMode\FragmentNode.cs" />
+      <Script Remove="ContainerMode\FragmentNodeHelper.cs" />
+      <Script Remove="ContainerMode\FragmentOptions.cs" />
+      <Script Remove="ContainerMode\FragmentsChangeArgs.cs" />
+      <Script Remove="ContainerMode\IContainerRegistry.cs" />
+      <Script Remove="ContainerMode\IDialogRef.cs" />
+      <Script Remove="EventUtil.cs" />
+      <Script Remove="IFragmentNodeOptions.cs" />
+      <Script Remove="IOkCancelComponent.cs" />
+      <Script Remove="IPortalService.cs" />
+      <Script Remove="PortalOutlet.cs" />
+      <Script Remove="PortalService.cs" />
+      <Script Remove="ServiceExt.cs" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <SupportedPlatform Include="browser" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" />
+        <PackageReference Include="OneOf" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="wwwroot\" />
+    </ItemGroup>
+
+</Project>

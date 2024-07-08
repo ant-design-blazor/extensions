@@ -1,0 +1,16 @@
+﻿<AntDesign.Button OnClick="@(() => _visible = true)">
+    Open
+</AntDesign.Button>
+
+
+<AntDesign.Extensions.Dialog Title="@("Title")"
+                             @bind-Visible="@_visible"
+                             DestroyOnClose>
+
+    <AntDesign.InputNumber Value="@val" />
+</AntDesign.Extensions.Dialog>
+
+@code {
+    private bool _visible = false;
+    private int val = 1;
+}

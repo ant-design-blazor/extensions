@@ -1,0 +1,53 @@
+﻿@using AntDesign.Extensions.Samples.Demos.Components
+
+@{
+    RenderFragment footer =@<CustomFooter1 />;
+}
+
+<AntDesign.Button OnClick="@(() => _visible1 = true)">
+    CustomFooter1
+</AntDesign.Button>
+<AntDesign.Extensions.Dialog Title="@("Title")"
+                             @bind-Visible="@_visible1"
+                             Footer="@footer">
+    somg conent
+</AntDesign.Extensions.Dialog>
+
+
+<AntDesign.Button OnClick="@(() => _visible2 = true)">
+    CustomFooter2
+</AntDesign.Button>
+<AntDesign.Extensions.Dialog Title="@("Title")"
+                             @bind-Visible="@_visible2">
+    <ChildContent>
+        somg conent
+    </ChildContent>
+    <Footer>
+        <AntDesign.Extensions.Footer>
+            <Buttons>
+                <Button OnClick="@Close2"
+                        Type="@ButtonType.Primary">
+                    Button1
+                </Button>
+                <Button OnClick="@Close2"
+                        Type="@ButtonType.Default">
+                    Button2
+                </Button>
+                <Button OnClick="@Close2"
+                        Type="@ButtonType.Dashed">
+                    Button3
+                </Button>
+            </Buttons>
+        </AntDesign.Extensions.Footer>
+    </Footer>
+</AntDesign.Extensions.Dialog>
+
+@code {
+    private bool _visible1 = false;
+    private bool _visible2 = false;
+
+    private void Close2()
+    {
+        _visible2 = false;
+    }
+}

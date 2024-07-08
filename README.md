@@ -60,8 +60,8 @@ import * as common from "./scripts/common";
 import * as {ComponentName} from './ts/{component}';
 
 
-(window as any).AntDesign.ext.common = common;
-(window as any).AntDesign.ext.{ComponentName} = {ComponentName};
+(window as any).antd.ext.common = common;
+(window as any).antd.ext.{ComponentName} = {ComponentName};
 ```
 
 

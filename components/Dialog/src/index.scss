@@ -1,0 +1,107 @@
+﻿$cls-prefix: antd-ext-dialog;
+
+.#{$cls-prefix}-root {
+    --dialog-bg-color: rgba(0, 0, 0, 0.45);
+    --dialog-z-index: 1000;
+
+    .#{$cls-prefix}-mask {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--dialog-bg-color);
+        z-index: var(--dialog-z-index);
+    }
+
+    .#{$cls-prefix}-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: var(--dialog-z-index);
+
+        .#{$cls-prefix}-position {
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, 0);
+            top: 100px;
+            pointer-events: auto;
+
+            &.#{$cls-prefix}-center {
+                top: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+    }
+}
+
+.#{$cls-prefix}-main {
+    --dialog-padding: 1rem;
+    --dialog-border: 1px solid #f0f0f0;
+
+    background-color: #fff;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+
+    &.#{$cls-prefix}-mode-normal {
+        border: var(--dialog-border);
+    }
+
+    .#{$cls-prefix}-header:has(*) {
+        border-bottom: var(--dialog-border);
+
+        > div {
+            font-size: 14px;
+            position: relative;
+            display: flex;
+
+            .#{$cls-prefix}-title {
+                flex-grow: 1;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                padding: var(--dialog-padding) 0 var(--dialog-padding) var(--dialog-padding);
+            }
+
+            .#{$cls-prefix}-tools {
+
+                & > span {
+                    cursor: pointer;
+                    padding: 0;
+                    margin: 0;
+                    display: flex;
+                    justify-content: center;
+                    align-content: center;
+                    width: calc(var(--dialog-padding) * 2 + 22px);
+                    height: calc(var(--dialog-padding) * 2 + 22px);
+                    line-height: calc(var(--dialog-padding) * 2 + 22px);
+                    text-align: center;
+                }
+            }
+        }
+    }
+
+    .#{$cls-prefix}-content {
+        padding: var(--dialog-padding);
+        flex-grow: 1;
+    }
+
+    .#{$cls-prefix}-footer:has(*) {
+        border-top: var(--dialog-border);
+
+        & > div {
+            padding: var(--dialog-padding);
+            text-align: right
+        }
+    }
+}
+
+
+.#{$cls-prefix}-main {
+    .#{$cls-prefix}-content.#{$cls-prefix}-content-form {
+        padding: 0;
+    }
+}

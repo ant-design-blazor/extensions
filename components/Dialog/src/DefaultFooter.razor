@@ -1,0 +1,30 @@
+﻿@namespace AntDesign.Extensions
+
+<AntDesign.Extensions.Footer>
+    <Buttons>
+        <button @onclick="@HandleOk" class="ant-btn ant-btn-primary">
+            @{
+                if (OkCancelComponent.OkText.IsT0)
+                {
+                    @(OkCancelComponent.OkText.AsT0)
+                }
+                else
+                {
+                    @(OkCancelComponent.OkText.AsT1)
+                }
+            }
+        </button>
+        <button @onclick="@HandleCancel" class="ant-btn ant-btn-default">
+        @{
+            if (OkCancelComponent.CancelText.IsT0)
+            {
+                @(OkCancelComponent.CancelText.AsT0)
+            }
+            else
+            {
+                @(OkCancelComponent.CancelText.AsT1)
+            }
+        }
+        </button>
+    </Buttons>
+</AntDesign.Extensions.Footer>

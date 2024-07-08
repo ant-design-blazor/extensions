@@ -360,10 +360,12 @@ MigrationBackup/
 .ionide/
 
 
-src/**/dist/*
-src/**/wwwroot/src/*
-src/**/wwwroot/dist/*
+components/**/dist/*
+components/**/wwwroot/src/*
+components/**/wwwroot/dist/*
+components/**/wwwroot/*.lib.module.js
 
-src/bundle/**/*
+components/_bundle/**/*
 dist/**/*
-
+.history
+/components/MonacoEditor/sample/Properties/launchSettings.json

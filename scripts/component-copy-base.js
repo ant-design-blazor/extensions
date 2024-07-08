@@ -6,24 +6,25 @@ const { globalMount, projRootDir } = require("./common")
 
 
 const bundleCopyTs = (componentName) => {
-  const outputBaseDir = path.join(projRootDir, "bundle/src");
+  const outputBaseDir = path.join(projRootDir, "_bundle/src");
   copyOneComponent(componentName, "_scripts", outputBaseDir, "ts");
 }
 
 const bundleCopyScss = (componentName, theme = "default") => {
-  const outputBaseDir = path.join(projRootDir, "bundle/src");
+  const outputBaseDir = path.join(projRootDir, "_bundle/src");
+  // console.log("bundleCopyScss", outputBaseDir);
   copyOneComponent(componentName, "_styles", outputBaseDir, "scss", theme);
 }
 
 const componentCopyTs = (componentName) => {
   const componentDir = path.join(projRootDir, componentName);
-  const outputBaseDir = `${componentDir}/wwwroot/src`;
+  const outputBaseDir = `${componentDir}/src/wwwroot/src`;
   copyOneComponent(componentName, "_scripts", outputBaseDir, "ts");
 }
 
 const componentCopyScss = (componentName, theme = "default") => {
   const componentDir = path.join(projRootDir, componentName);
-  const outputBaseDir = `${componentDir}/wwwroot/src`;
+  const outputBaseDir = `${componentDir}/src/wwwroot/src`;
 
   copyOneComponent(componentName, "_styles", outputBaseDir, "scss", theme);
 }
@@ -58,15 +59,21 @@ const copyOneComponent = (componentName, commonDir, outputBaseDir, type, theme =
 }
 
 function copyToComponentWwwroot(tasks, outputBaseDir, componentName, type) {
+  console.log("copyToComponentWwwroot");
+
   // read dir
   const componentDir = path.join(projRootDir, componentName);
-  const componentDirAbs = path.resolve(__dirname, `../${componentDir}`);
+  // x:\xxx\ant-design-blazor-components\components\MonacoEditor\src
+  const componentDirAbs = path.resolve(__dirname, `../${componentDir}/src`);
   fs.ensureDirSync(componentDirAbs)
+  console.log("componentDirAbs", componentDirAbs);
 
   // output dir
   const outputDir = `${outputBaseDir}/${type}/${componentName}`
   const outputDirAbs = path.resolve(__dirname, `../${outputDir}`);
   fs.ensureDirSync(outputDirAbs)
+
+  console.log("outputDir", outputDirAbs);
 
   // copy
   const componentFiles = glob.globSync(`${componentDirAbs}/*.${type}`)
@@ -99,6 +106,7 @@ function copyToComponentWwwroot(tasks, outputBaseDir, componentName, type) {
 
 
 function copyCommonToComponentWwwroot(tasks, outputDir, dirName, type) {
+  console.log("copyCommonToComponentWwwroot");
   let commonDir = "";
   if (type.toLowerCase() == "ts") {
     commonDir = "scripts"
@@ -124,12 +132,14 @@ function copyCommonToComponentWwwroot(tasks, outputDir, dirName, type) {
 
 function createIndexFile(tasks, outputDir, fileContent, fileNameWithExt) {
   Promise.all(tasks).then((res) => {
+    // console.log("fileContent", fileContent);
+    console.log("output dir", path.resolve(__dirname, `../${outputDir}/${fileNameWithExt}`));
     fs.outputFile(
       path.resolve(__dirname, `../${outputDir}/${fileNameWithExt}`),
       fileContent,
       'utf8',
       (error) => {
-        // logger.success(`文件写入成功`);
+        console.log(`文件写入成功`);
       }
     );
   })

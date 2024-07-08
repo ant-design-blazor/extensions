@@ -7,7 +7,7 @@ const allEntryFiles = getAllComponentsEntryFiles("default.scss")
 
 // build
 allEntryFiles.forEach(async (libItem) => {
-  console.log("build ", libItem.entry);
+  console.log("build libItem", libItem.entry);
   const viteConfig = createScssConfig(libItem);
   console.log("build viteConfig", viteConfig);
   await build(viteConfig);

@@ -1,0 +1,21 @@
+﻿@inherits DialogFormBase
+
+<h1>pure dialog form</h1>
+<p>
+    some content
+</p>
+<div>
+    <Button OnClick="@base.CloseAsync">Close</Button>
+</div>
+
+@code{
+    public PureDialogForm():base()
+    {
+        
+    }
+
+    public PureDialogForm(IServiceProvider ServiceProvider) : base(ServiceProvider)
+    {
+
+    }
+}

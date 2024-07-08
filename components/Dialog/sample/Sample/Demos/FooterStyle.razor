@@ -1,0 +1,21 @@
+﻿<AntDesign.Button OnClick="@(() => _visible = true)">
+    Open
+</AntDesign.Button>
+<AntDesign.Extensions.Dialog Title="@("Title")"
+                             @bind-Visible="@_visible"
+                             FooterClass="@("custom-header-class")"
+                             FooterStyle="@("color: #fff")">
+
+
+    somg conent
+</AntDesign.Extensions.Dialog>
+
+<style>
+    .custom-header-class {
+        background-color: #000;
+    }
+</style>
+
+@code {
+    private bool _visible = false;
+}

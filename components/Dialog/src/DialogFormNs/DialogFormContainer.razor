@@ -1,0 +1,11 @@
+﻿@namespace AntDesign.Extensions
+@using Microsoft.AspNetCore.Components.Sections
+
+@foreach (var form in _forms)
+{
+    <SectionContent SectionId="@DialogFormOutlet.Name">
+        <DialogCore Options="@form.GetOptions()">
+            @form.RenderFragment
+        </DialogCore>
+    </SectionContent>
+}

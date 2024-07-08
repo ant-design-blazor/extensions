@@ -1,16 +1,32 @@
 ﻿<Project>
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <LangVersion>11.0</LangVersion>
+    <PropertyGroup>
+        <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>11.0</LangVersion>
 
-    <FileVersion>0.1.0.0</FileVersion>
-    <ProductVersion>0.1.0.0</ProductVersion>
-    <AssemblyVersion>0.1.0.0</AssemblyVersion>
-    <Version>0.1.0</Version>
+        <FileVersion>0.1.0.0</FileVersion>
+        <ProductVersion>0.1.0.0</ProductVersion>
+        <AssemblyVersion>0.1.0.0</AssemblyVersion>
+        <Version>0.1.0</Version>
 
-    <RepositoryType>git</RepositoryType>
-    <RootNamespace>AntDesign.Extensions</RootNamespace>
-  </PropertyGroup>
+        <RepositoryType>git</RepositoryType>
+        <RootNamespace>AntDesign.Extensions</RootNamespace>
+
+        <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+        <TypeScriptEnableIncrementalMSBuild>false</TypeScriptEnableIncrementalMSBuild>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Script Include="**"/>
+        <Script Remove="**.d.ts"/>
+    </ItemGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <NoWarn>1701;1702;AntdExperimental</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <NoWarn>1701;1702;AntdExperimental</NoWarn>
+    </PropertyGroup>
 </Project>

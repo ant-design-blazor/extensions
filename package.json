@@ -23,7 +23,9 @@
     "generate:proj": "npm run generate:proj:css && npm run generate:proj:js",
     "build:css": "npm run generate:proj:css && node scripts/component-build-css.js --mode development",
     "build:js": "npm run generate:proj:js && node scripts/component-build-js.js --mode development",
-    "build": "npm run build:css && npm run build:js"
+    "build": "npm run build:css && npm run build:js",
+
+    "clear": "node scripts/clear.js"
   },
   "author": "",
   "license": "MIT",

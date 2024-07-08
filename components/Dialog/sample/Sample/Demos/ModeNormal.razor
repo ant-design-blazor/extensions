@@ -1,0 +1,12 @@
+﻿<AntDesign.Button OnClick="@(() => _visible = true)">
+    打开
+</AntDesign.Button>
+<AntDesign.Extensions.Dialog Mode="@DialogMode.Normal"
+                             Title="Normal 模式"
+                             @bind-Visible="@_visible">
+    somg conent
+</AntDesign.Extensions.Dialog>
+@code {
+    private bool _visible = false;
+
+}
