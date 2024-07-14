@@ -57,7 +57,11 @@ public abstract class DialogForm : DialogFormBase
         if (Title != null)
         {
             builder.OpenComponent<Header>(0);
-            builder.AddAttribute(1, nameof(Header.Title), Title);
+            builder.AddAttribute(1, nameof(Header.ChildContent), (RenderFragment)((_builder) =>
+            {
+                _builder.AddMarkupContent(-2, Title);
+            }
+            ));
             builder.AddAttribute(2, nameof(Header.OnCancel), RuntimeHelpers.TypeCheck
                 (
                 EventCallback.Factory.Create(this, base.OnCancel)

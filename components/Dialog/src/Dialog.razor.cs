@@ -31,6 +31,7 @@ public partial class Dialog : AntxDomComponentBase, IOkCancelComponent
     #endregion
 
     [Parameter]
+    [EditorRequired]
     public bool Visible { get; set; }
 
     [Parameter]
@@ -40,6 +41,9 @@ public partial class Dialog : AntxDomComponentBase, IOkCancelComponent
 
     [Parameter]
     public string? Title { get; set; } = "";
+
+    [Parameter]
+    public RenderFragment? TitleTempalte { get; set; } = null;
 
     [Parameter]
     public ClassBuilder? HeaderClass { get; set; }
@@ -125,17 +129,30 @@ public partial class Dialog : AntxDomComponentBase, IOkCancelComponent
 
     protected void CreateHeader(RenderTreeBuilder builder)
     {
-        if (Title != null)
+        if (Title == null && TitleTempalte == null)
         {
-            builder.OpenComponent<Header>(-3);
-            builder.AddAttribute(-2, nameof(Header.Title), Title);
-            builder.AddAttribute(-1, nameof(Header.OnCancel), RuntimeHelpers.TypeCheck
-                (
-                EventCallback.Factory.Create(this, OnCancelBtnClick)
-                )
-            );
-            builder.CloseComponent();
+            return;
         }
+
+        builder.OpenComponent<Header>(-5);
+        if(TitleTempalte != null)
+        {
+            builder.AddAttribute(-4, nameof(Header.ChildContent), TitleTempalte);
+        }
+        else
+        {
+            builder.AddAttribute(-3, nameof(Header.ChildContent), (RenderFragment)((_builder) =>
+            {
+                _builder.AddMarkupContent(-2, Title);
+            }
+            ));
+        }
+        builder.AddAttribute(-1, nameof(Header.OnCancel), RuntimeHelpers.TypeCheck
+            (
+            EventCallback.Factory.Create(this, OnCancelBtnClick)
+            )
+        );
+        builder.CloseComponent();
     }
 
 

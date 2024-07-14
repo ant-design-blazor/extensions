@@ -1,0 +1,19 @@
+﻿<Project>
+    <PropertyGroup>
+        <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+        <TypeScriptEnableIncrementalMSBuild>false</TypeScriptEnableIncrementalMSBuild>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Script Include="**"/>
+        <Script Remove="**.d.ts"/>
+    </ItemGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <NoWarn>1701;1702;AntdExperimental</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <NoWarn>1701;1702;AntdExperimental</NoWarn>
+    </PropertyGroup>
+</Project>

@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AntDesign.Extensions;
+
+[ExcludeFromCodeCoverage]
 public class DialogCoreOptions
 {
     public string ClsPrefix { get; set; } = $"{Constants.ClsPrefix}-dialog";

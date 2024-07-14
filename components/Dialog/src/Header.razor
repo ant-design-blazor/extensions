@@ -1,7 +1,9 @@
 ﻿@namespace AntDesign.Extensions
 
 <div>
-    <div class="@($"{ClsPrefix}-title")">@Title</div>
+    <div class="@($"{ClsPrefix}-title")">
+        @ChildContent
+    </div>
     <div class="@($"{ClsPrefix}-tools")">
         @if(Tools == null)
         {

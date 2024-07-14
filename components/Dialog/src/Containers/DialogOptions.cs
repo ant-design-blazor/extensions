@@ -2,8 +2,12 @@
 using OneOf;
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AntDesign.Extensions;
+
+
+[ExcludeFromCodeCoverage]
 public class DialogOptions : FragmentOptions
 {
     internal bool Opened { get; set; }
@@ -30,6 +34,8 @@ public class DialogOptions : FragmentOptions
     #region Header
 
     public string? Title { get; set; } = "";
+
+    public RenderFragment? TitleTempalte { get; set; } = null;
 
     public ClassBuilder? HeaderClass { get; set; }
 

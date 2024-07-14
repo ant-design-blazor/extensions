@@ -1,14 +1,6 @@
 ﻿@namespace AntDesign.Extensions
 @inherits AntxDomComponentBase
 
-@{
-    RenderFragment? header = null;
-     @if(Title != null)
-     {
-        header =@<AntDesign.Extensions.Header Title="@Title" OnCancel="@OnCancelBtnClick" />;
-    }
-}
-
 @if (_hasAdd)
 {
     <div @ref="_portalRef" style="@_portalStyle">

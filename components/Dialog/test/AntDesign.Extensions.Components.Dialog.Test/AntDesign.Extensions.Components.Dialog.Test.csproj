@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<IsPackable>false</IsPackable>
+    <LangVersion>latest</LangVersion>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+  </PropertyGroup>
+
+	<ItemGroup>
+	  <Script Remove="BasicUseTest.cs" />
+	  <Script Remove="ContentTest.cs" />
+	  <Script Remove="DialogModeTest.cs" />
+	  <Script Remove="DialogTestBase.cs" />
+	  <Script Remove="FooterTest.cs" />
+	  <Script Remove="HeaderTest.cs" />
+	  <Script Remove="MaskTest.cs" />
+	  <Script Remove="PositionTes.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="Bunit" />
+		<Using Include="Bunit.TestDoubles" />
+		<Using Include="Microsoft.Extensions.DependencyInjection" />
+		<Using Include="Xunit" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="bunit" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+		<PackageReference Include="coverlet.collector">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+    <PackageReference Include="Moq" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="xunit" />
+		<PackageReference Include="xunit.runner.visualstudio">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		  </PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\sample\Sample.Demos\Sample.Demos.csproj" />
+	</ItemGroup>
+
+</Project>

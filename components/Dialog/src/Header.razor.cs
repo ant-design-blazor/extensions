@@ -8,7 +8,7 @@ public partial class Header
     public string ClsPrefix { get; set; } = Dialog.ClsPrefix;
 
     [Parameter]
-    public string? Title { get; set; } = "";
+    public RenderFragment? ChildContent { get; set; } = null;
 
     /// <summary>
     /// if tools is not null, OnCancel event will not take effect.

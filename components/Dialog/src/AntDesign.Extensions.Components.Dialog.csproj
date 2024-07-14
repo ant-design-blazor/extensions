@@ -4,10 +4,13 @@
     <LangVersion>latest</LangVersion>
     <PackageId>AntDesign.Extensions.Components.Dialog</PackageId>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <PackageId>AntDesign.Extensions.Components.Dialog</PackageId>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Script Remove="Header - 复制.razor.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />
